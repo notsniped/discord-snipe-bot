@@ -6,7 +6,7 @@ token inside the empty variable. You can get your Discord bot token from https:/
 Also in the same part of the code, replace 'EMPRY_USERNAME#0000' in the owner variable with your Discord username.
 
 # How to install
-To install for windows, run win_cmd_installer.bat.
+To install for windows, run win_cmd_install.bat.
 If you are on a machine running GNU/Linux, run linux_installer.sh.
 
 # features
