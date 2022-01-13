@@ -2,8 +2,8 @@
 This is a bot made with the same message content sniping API from isobot and Arch bot.
 It's default prefix is -, however you can also set a custom prefix to your liking.
 To run it, go into the 'bot_token' variable in the 'USER CONFIG' part of the code. Enter your bot
-token inside the empty variable. You can get your Discord bot token from https://discord.com/developers
-Also in the same part of the code, replace 'EMPRY_USERNAME#0000' in the owner variable with your Discord username.
+token inside the empty variable. You can get your Discord bot token from https://discord.com/developers.
+Also in the same part of the code, replace 'EMPTY_USERNAME#0000' in the owner variable with your Discord username.
 
 # How to install
 To install for windows, run win_cmd_install.bat.
