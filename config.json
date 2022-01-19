@@ -1,6 +1,8 @@
 {
-    "config": {
-        "snipe": true,
-        "editsnipe": true
+  "config": {
+    "logs": {
+      "snipe": true,
+      "editsnipe": true
     }
+  }
 }
