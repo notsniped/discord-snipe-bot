@@ -3,6 +3,7 @@ import time
 import os.path
 import discord
 import datetime
+import json
 from discord.ext import commands
 from discord.ext.commands import *
 from discord.ext import tasks
@@ -21,11 +22,24 @@ if os.name == 'nt':
     os.system('cls')
 else:
     os.system('clear')
-client = commands.Bot(command_prefix=str(prefix), intents=intents)
+client = commands.Bot(command_prefix=str(prefix), intents=intents) ## READ COMMENT AT LINE 12 FOR MORE INFO ##
 global startTime
 startTime = time.time()
 client.remove_command('help')
+homedir = os.getcwd()
 
+if os.name == 'nt':
+    with open(f'{homedir}\\config.json', 'r') as f:
+        global config
+        config = json.load(f)
+else:
+    with open(f'{homedir}/config.json', 'r') as f:
+        global config
+        config = json.load(f)
+
+snipe_log:bool = config[str(config)][str(logs)][snipe]
+editsnipe_log:bool = config[str(config)][str(logs)][editsnipe]
+        
 def randColor():
     return discord.Color.random()
 
@@ -59,6 +73,10 @@ async def on_message_delete(message):
         channel = message.channel
         snipe_message_author[message.channel.id] = message.author
         snipe_message_content[message.channel.id] = message.content
+        if bool(snipe_log) == True:
+            print(f"Message deleted in #{channel.name} ({guild.name}):\n   Message content: {message.content}")
+        else:
+            pass
 
 @client.event
 async def on_message_edit(message_before, message_after):
@@ -68,6 +86,10 @@ async def on_message_edit(message_before, message_after):
         channel = message_before.channel
         editsnipe_message_before_content[channel.id] = message_before.content
         editsnipe_message_after_content[channel.id] = message_after.content
+        if bool(editsnipe_log) == True:
+            print(f"Message edited in #{channel.name} ({guild.name}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
+        else:
+            pass
 
 @client.command()
 async def snipe(ctx):
