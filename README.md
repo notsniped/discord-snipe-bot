@@ -1,4 +1,6 @@
-# Discord Snipe Bot
+### Discord Snipe Bot
+[![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=You+can+snipe+deleted+message+content;You+can+editsnipe+edited+message+content;Developer+of+arch+bot)]
+
 This is a bot made with the same message content sniping API from isobot and Arch bot.
 It's default prefix is -, however you can also set a custom prefix to your liking.
 To run it, go into the 'bot_token' variable in the 'USER CONFIG' part of the code. Enter your bot
