@@ -1,5 +1,5 @@
 # Discord Snipe Bot
-![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=You+can+snipe+deleted+message+content;You+can+editsnipe+edited+message+content)]
+![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=You+can+snipe+deleted+message+content;You+can+editsnipe+edited+message+content)
 
 This is a bot made with the same message content sniping API from isobot and Arch bot.
 It's default prefix is -, however you can also set a custom prefix to your liking.
@@ -17,4 +17,4 @@ If you are on a machine running GNU/Linux, run linux_installer.sh.
 • `-editsnipe` command to show the most recently edited message in a channel.
 
 # If you have any new ideas for this bot, or want to report a bug, DM notsniped#4573
-Parts of README.md pulled from https://github.com/sniperking3335/heckerbot
+Parts of README.md pulled from [here](https://github.com/sniperking3335/heckerbot)
