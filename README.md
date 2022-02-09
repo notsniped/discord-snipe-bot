@@ -11,7 +11,7 @@ Also in the same part of the code, replace 'EMPTY_USERNAME#0000' in the owner va
 To install for windows, run win_cmd_install.bat.
 If you are on a machine running GNU/Linux, run linux_installer.sh.
 
-# features
+# Features
 • `-snipe` command to show the most recently deleted message in a channel.
 
 • `-editsnipe` command to show the most recently edited message in a channel.
