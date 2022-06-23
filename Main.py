@@ -17,7 +17,7 @@ bot_token = '' ## Add the bot token in this variable. For more info check README
 ### USER CONFIGURATION END ###
 
 intents = discord.Intents.all()
-botVer = 'v1.0'
+botVer = 'v1.2'
 if os.name == 'nt':
     os.system('cls')
 else:
@@ -37,8 +37,8 @@ else:
         global config
         config = json.load(f)
 
-snipe_log:bool = config[str(config)][str(logs)][snipe]
-editsnipe_log:bool = config[str(config)][str(logs)][editsnipe]
+snipe_log:bool = config[str("config")][str("logs")]["snipe"]
+editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
         
 def randColor():
     return discord.Color.random()
