@@ -22,7 +22,7 @@ if os.name == 'nt':
     os.system('cls')
 else:
     os.system('clear')
-client = commands.Bot(command_prefix=str(prefix), intents=intents) ## READ COMMENT AT LINE 12 FOR MORE INFO ##
+client = commands.Bot(command_prefix=str(prefix), intents=intents) ## READ COMMENT AT LINE 13 FOR MORE INFO ##
 global startTime
 startTime = time.time()
 client.remove_command('help')
