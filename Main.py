@@ -1,9 +1,4 @@
-import os
-import time
-import os.path
-import discord
-import datetime
-import json
+import os, time, os.path, discord, datetime, json
 from discord.ext import commands
 from discord.ext.commands import *
 from discord.ext import tasks
@@ -17,7 +12,7 @@ bot_token = '' ## Add the bot token in this variable. For more info check README
 ### USER CONFIGURATION END ###
 
 intents = discord.Intents.all()
-botVer = 'v1.2'
+botVer = 'v1.2.1'
 if os.name == 'nt':
     os.system('cls')
 else:
