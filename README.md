@@ -16,5 +16,5 @@ If you are on a machine running GNU/Linux, run linux_installer.sh.
 
 • `-editsnipe` command to show the most recently edited message in a channel.
 
-### If you have any new ideas for this bot, or want to report a bug, DM notsniped#4573
+### If you have any new ideas for this bot, or want to report a bug, please make an [issue](https://github.com/notsniped/discord-snipe-bot/issues/new) and we'll get to it.
 Parts of README.md pulled from [here](https://github.com/sniperking3335/heckerbot)
