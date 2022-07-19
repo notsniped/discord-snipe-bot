@@ -22,14 +22,13 @@ global startTime
 startTime = time.time()
 client.remove_command('help')
 homedir = os.getcwd()
+config:dict = {}
 
 if os.name == 'nt':
     with open(f'{homedir}\\config.json', 'r') as f:
-        global config
         config = json.load(f)
 else:
     with open(f'{homedir}/config.json', 'r') as f:
-        global config
         config = json.load(f)
 
 snipe_log:bool = config[str("config")][str("logs")]["snipe"]
