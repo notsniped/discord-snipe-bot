@@ -112,7 +112,7 @@ async def editsnipe(ctx):
     name="snipe",
     description="Fetches the most-recently deleted message in this channel"
 )
-async def snipe(ctx:SlashContext):
+async def snipe(ctx: SlashContext):
     channel = ctx.channel
     try:
         em = discord.Embed(name=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=randColor())
@@ -125,7 +125,7 @@ async def snipe(ctx:SlashContext):
     name="editsnipe",
     description="Fetches the most-recently edited message in this channel"
 )
-async def editsnipe(ctx:SlashContext):
+async def editsnipe(ctx: SlashContext):
     channel = ctx.channel
     try:
         em = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=randColor())
