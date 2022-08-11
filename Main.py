@@ -5,13 +5,13 @@ from discord_slash.utils.manage_commands import create_choice, create_option
 from discord.ext.commands import *
 from discord.ext import tasks
 
-### USER CONFIGURATION ###
+# USER CONFIGURATION
 
-prefix = '-' ## Default prefix is -, you can replace it with your preferred prefix ##
-owner = 'EMPTY_USERNAME#0000' ## Replace 'EMPTY_USERNAME#0000' with your Discord username ##
-bot_token = '' ## Add the bot token in this variable. For more info check README.md ##
+prefix = '-'  # Default prefix is -, you can replace it with your preferred prefix
+owner = 'EMPTY_USERNAME#0000'  # Replace 'EMPTY_USERNAME#0000' with your Discord username
+bot_token = ''  # Add the bot token in this variable. For more info check README.md
 
-### USER CONFIGURATION END ###
+# USER CONFIGURATION END
 
 intents = discord.Intents.all()
 botVer = 'v1.2.1'
@@ -19,7 +19,7 @@ if os.name == 'nt':
     os.system('cls')
 else:
     os.system('clear')
-client = commands.Bot(command_prefix=str(prefix), intents=intents) ## READ COMMENT AT LINE 13 FOR MORE INFO ##
+client = commands.Bot(command_prefix=str(prefix), intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
 slash = SlashCommand(client, sync_commands=True)
 global startTime
 startTime = time.time()
@@ -92,9 +92,9 @@ async def on_message_edit(message_before, message_after):
 async def snipe(ctx):
     channel = ctx.channel
     try:
-        em = discord.Embed(name = f"Last deleted message in #{channel.name}", description = snipe_message_content[channel.id], color=randColor())
-        em.set_footer(text = f"This message was sent by {snipe_message_author[channel.id]}")
-        await ctx.send(embed = em)
+        em = discord.Embed(name=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=randColor())
+        em.set_footer(text=f"This message was sent by {snipe_message_author[channel.id]}")
+        await ctx.send(embed=em)
     except:
         await ctx.send(f"There are no recently deleted messages in <#{channel.id}>")
 
@@ -104,7 +104,7 @@ async def editsnipe(ctx):
     try:
         em = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=randColor())
         em.set_footer(text=f'This message was edited by {editsnipe_message_author[channel.id]}')
-        await ctx.send(embed = em)
+        await ctx.send(embed=em)
     except:
         await ctx.reply(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
