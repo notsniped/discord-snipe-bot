@@ -33,6 +33,18 @@ else:
 snipe_log:bool = config[str("config")][str("logs")]["snipe"]
 editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
 
+if os.name == "nt":
+    if not os.path.isdir(f"{homedir}\\snipe-bot-data"): os.mkdir(f"{homedir}\\snipe-bot-data")
+    # Making log files (mode 'x' creates new file in that path if it doesn't exist. Open file and do not write to it)
+    open(f"{homedir}\\snipe-bot-data\\snipe.log", 'x')
+    open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'x')
+    open(f"{homedir}\\snipe-bot-data\\errors.log", 'x')
+if os.name == "posix":
+    if not os.path.isdir(f"{homedir}/snipe-bot-data"): os.mkdir(f"{homedir}/snipe-bot-data")
+    open(f"{homedir}/snipe-bot-data/snipe.log", 'x')
+    open(f"{homedir}/snipe-bot-data/editsnipe.log", 'x')
+    open(f"{homedir}/snipe-bot-data/errors.log", 'x')
+
 @client.command()
 async def help(ctx):
     e = discord.Embed(title='Command Help', description=f'Prefix: `{prefix}`\n\n`{str(prefix)}snipe`: See the most recently deleted message in this channel.\n`{str(prefix)}editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
