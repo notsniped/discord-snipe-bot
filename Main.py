@@ -61,30 +61,36 @@ class Log:
             with open(f"{homedir}\\snipe-bot-data\\snipe.log", 'w') as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
+                file.close()
         elif os.name == "posix":
             with open(f"{homedir}/snipe-bot-data/snipe.log", 'w') as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
+                file.close()
 
     def editsnipe(self, text: str):
         if os.name == "nt":
             with open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'w') as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
+                file.close()
         elif os.name == "posix":
             with open(f"{homedir}/snipe-bot-data/editsnipe.log", 'w') as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
+                file.close()
 
     def error(self, text: str):
         if os.name == "nt":
             with open(f"{homedir}\\snipe-bot-data\\errors.log", 'w') as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
+                file.close()
         elif os.name == "posix":
             with open(f"{homedir}/snipe-bot-data/errors.log", 'w') as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
+                file.close()
 
 
 logger = Log(os.name, homedir)
