@@ -35,16 +35,18 @@ snipe_log:bool = config[str("config")][str("logs")]["snipe"]
 editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
 
 if os.name == "nt":
-    if not os.path.isdir(f"{homedir}\\snipe-bot-data"): os.mkdir(f"{homedir}\\snipe-bot-data")
-    # Making log files (mode 'x' creates new file in that path if it doesn't exist. Open file and do not write to it)
-    open(f"{homedir}\\snipe-bot-data\\snipe.log", 'x')
-    open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'x')
-    open(f"{homedir}\\snipe-bot-data\\errors.log", 'x')
+    if not os.path.isdir(f"{homedir}\\snipe-bot-data"):
+        os.mkdir(f"{homedir}\\snipe-bot-data")
+        # Making log files (mode 'x' creates new file in that path if it doesn't exist. Open file and do not write to it)
+        open(f"{homedir}\\snipe-bot-data\\snipe.log", 'x')
+        open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'x')
+        open(f"{homedir}\\snipe-bot-data\\errors.log", 'x')
 if os.name == "posix":
-    if not os.path.isdir(f"{homedir}/snipe-bot-data"): os.mkdir(f"{homedir}/snipe-bot-data")
-    open(f"{homedir}/snipe-bot-data/snipe.log", 'x')
-    open(f"{homedir}/snipe-bot-data/editsnipe.log", 'x')
-    open(f"{homedir}/snipe-bot-data/errors.log", 'x')
+    if not os.path.isdir(f"{homedir}/snipe-bot-data"):
+        os.mkdir(f"{homedir}/snipe-bot-data")
+        open(f"{homedir}/snipe-bot-data/snipe.log", 'x')
+        open(f"{homedir}/snipe-bot-data/editsnipe.log", 'x')
+        open(f"{homedir}/snipe-bot-data/errors.log", 'x')
 
 
 class Log:
