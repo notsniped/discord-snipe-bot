@@ -4,6 +4,7 @@ import time
 import os.path
 import discord
 import json
+import framework.auth
 from datetime import datetime
 from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext
@@ -15,7 +16,6 @@ from framework.logger import Logger
 # User Configuration (edit stuff here)
 prefix = "-"  # Default prefix is -, you can replace it with your preferred prefix
 owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord username
-bot_token = ""  # Add the bot token in this variable. For more info check README.md
 
 # Variables
 intents = discord.Intents.all()
@@ -148,4 +148,12 @@ async def editsnipe(ctx: SlashContext):
     except KeyError: await ctx.reply(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 # Initialization
-client.run(bot_token)
+token = framework.auth.get_token()
+if token != "": 
+    try: client.run(token)
+    except Exception as exc:
+        print(f"[main/CLIENT] Error: Unable to start client: {type(exc).__name__}: {exc}")
+        raise SystemExit
+else:
+    print("[main/CLIENT] Error: Unable to start client: No Discord bot token found. Please insert one in the \"token\" value in the config.json file and try again.\nYou can get a Discord bot token from https://discord.com/developers by making a new application.")
+    raise SystemExit
