@@ -107,8 +107,8 @@ async def snipe(ctx):
     try:
         em = discord.Embed(title=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=discord.Color.random())
         em.set_footer(text=f"This message was sent by {snipe_message_author[channel.id]}")
-        await ctx.send(embed=em)
-    except KeyError: await ctx.send(f"There are no recently deleted messages in <#{channel.id}>")
+        await ctx.respond(embed=em)
+    except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{channel.id}>")
 
 @client.slash_command(
     name="editsnipe",
@@ -119,8 +119,8 @@ async def editsnipe(ctx):
     try:
         em = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=discord.Color.random())
         em.set_footer(text=f'This message was edited by {editsnipe_message_author[channel.id]}')
-        await ctx.send(embed=em)
-    except KeyError: await ctx.reply(f'There are no recently edited messages in <#{ctx.channel.id}>')
+        await ctx.respond(embed=em)
+    except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 # Initialization
 token = framework.auth.get_token()
