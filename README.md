@@ -7,14 +7,28 @@ To run it, go into the 'bot_token' variable in the 'USER CONFIG' part of the cod
 token inside the empty variable. You can get your Discord bot token from https://discord.com/developers.
 Also in the same part of the code, replace 'EMPTY_USERNAME#0000' in the owner variable with your Discord username.
 
-# How to install
+# How to Use
+### Installation
 To install for windows, run win_cmd_install.bat.
+
 If you are on a machine running GNU/Linux, run linux_installer.sh.
 
-# Features
-• `-snipe` command to show the most recently deleted message in a channel.
+### Running
+Run this code in command prompt/terminal:
 
-• `-editsnipe` command to show the most recently edited message in a channel.
+```
+$ cd path/to/folder/
+$ python main.py
+```
+
+**However before running this,** make sure you insert a Discord bot token in the `config.json` file.
+
+(you can get a bot token from making a new application at https://discord.com/developers)
+
+# Features
+• `/snipe` command to show the most recently deleted message in a channel.
+
+• `/editsnipe` command to show the most recently edited message in a channel.
 
 ### If you have any new ideas for this bot, or want to report a bug, please make an [issue](https://github.com/notsniped/discord-snipe-bot/issues/new) and we'll get to it. If you want to contribute code to our repository, [pull requests](https://github.com/notsniped/discord-snipe-bot/pulls) are appreciated.
 <h6>Parts of README.md pulled from https://github.com/sniperking3335/heckerbot</h6>
