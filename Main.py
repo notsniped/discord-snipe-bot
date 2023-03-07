@@ -1,3 +1,4 @@
+# Imports
 import os, time, os.path, discord, json
 from datetime import datetime
 from discord.ext import commands
@@ -6,14 +7,12 @@ from discord_slash.utils.manage_commands import create_choice, create_option
 from discord.ext.commands import *
 from discord.ext import tasks
 
-# USER CONFIGURATION
-
+# User Configuration (edit stuff here)
 prefix = "-"  # Default prefix is -, you can replace it with your preferred prefix
 owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord username
 bot_token = ""  # Add the bot token in this variable. For more info check README.md
 
-# USER CONFIGURATION END
-
+# Variables
 intents = discord.Intents.all()
 botVer = 'v1.2.1'
 if os.name == 'nt': os.system('cls')
@@ -100,6 +99,7 @@ async def help(ctx):
     e = discord.Embed(title='Command Help', description=f'Prefix: `{prefix}`\n\n`{str(prefix)}snipe`: See the most recently deleted message in this channel.\n`{str(prefix)}editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
     await ctx.send(embed=e)
 
+# API Events
 @client.event
 async def on_ready():
     print(f'Logged on to Discord as {client.user.name}')
@@ -144,6 +144,7 @@ async def on_message_edit(message_before, message_after):
             logger.editsnipe(f"[{timestamp}] Message edited in #{channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
         else: pass
 
+# Commands
 @client.command()
 async def snipe(ctx):
     channel = ctx.channel
@@ -186,4 +187,5 @@ async def editsnipe(ctx: SlashContext):
         await ctx.send(embed=em)
     except KeyError: await ctx.reply(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
+# Initialization
 client.run(bot_token)
