@@ -1,3 +1,4 @@
+"""The authorization library for Discord Snipe Bot."""
 # Imports
 import json
 
