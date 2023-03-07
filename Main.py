@@ -47,7 +47,7 @@ if os.name == "posix":
 
 logger = Logger(os.name, homedir)
 
-@client.command()
+@client.slash_command()
 async def help(ctx):
     e = discord.Embed(title='Command Help', description=f'Prefix: `{prefix}`\n\n`{str(prefix)}snipe`: See the most recently deleted message in this channel.\n`{str(prefix)}editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
     await ctx.send(embed=e)
@@ -98,7 +98,7 @@ async def on_message_edit(message_before, message_after):
         else: pass
 
 # Commands
-@client.command()
+@client.slash_command()
 async def snipe(ctx):
     channel = ctx.channel
     try:
@@ -107,7 +107,7 @@ async def snipe(ctx):
         await ctx.send(embed=em)
     except KeyError: await ctx.send(f"There are no recently deleted messages in <#{channel.id}>")
 
-@client.command()
+@client.slash_command()
 async def editsnipe(ctx):
     channel = ctx.channel
     try:
