@@ -98,7 +98,10 @@ async def on_message_edit(message_before, message_after):
         else: pass
 
 # Commands
-@client.slash_command()
+@client.slash_command(
+    name="snipe",
+    description="Fetch the latest deleted message in this server."
+)
 async def snipe(ctx):
     channel = ctx.channel
     try:
@@ -107,7 +110,10 @@ async def snipe(ctx):
         await ctx.send(embed=em)
     except KeyError: await ctx.send(f"There are no recently deleted messages in <#{channel.id}>")
 
-@client.slash_command()
+@client.slash_command(
+    name="editsnipe",
+    description="Fetch the latest edited message in this server."
+)
 async def editsnipe(ctx):
     channel = ctx.channel
     try:
