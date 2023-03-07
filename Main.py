@@ -15,15 +15,12 @@ prefix = "-"  # Default prefix is -, you can replace it with your preferred pref
 owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord username
 
 # Variables
-intents = discord.Intents.all()
 botVer = 'v1.2.1'
 if os.name == 'nt': os.system('cls')
 else: os.system('clear')
-client = commands.Bot(command_prefix=str(prefix), intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
-slash = SlashCommand(client, sync_commands=True)
+client = discord.Bot()  # READ COMMENT AT LINE 13 FOR MORE INFO
 global startTime
 startTime = time.time()
-client.remove_command('help')
 homedir = os.getcwd()
 config = {}
 
