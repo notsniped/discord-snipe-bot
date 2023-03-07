@@ -49,7 +49,7 @@ logger = Logger(os.name, homedir)
 
 @client.slash_command()
 async def help(ctx):
-    e = discord.Embed(title='Command Help', description=f'Prefix: `{prefix}`\n\n`{str(prefix)}snipe`: See the most recently deleted message in this channel.\n`{str(prefix)}editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
+    e = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
     await ctx.send(embed=e)
 
 # API Events
@@ -100,7 +100,7 @@ async def on_message_edit(message_before, message_after):
 # Commands
 @client.slash_command(
     name="snipe",
-    description="Fetch the latest deleted message in this server."
+    description="Fetch the latest deleted message in this channel."
 )
 async def snipe(ctx):
     channel = ctx.channel
@@ -112,7 +112,7 @@ async def snipe(ctx):
 
 @client.slash_command(
     name="editsnipe",
-    description="Fetch the latest edited message in this server."
+    description="Fetch the latest edited message in this channel."
 )
 async def editsnipe(ctx):
     channel = ctx.channel
