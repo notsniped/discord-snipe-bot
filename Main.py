@@ -7,26 +7,19 @@ import json
 import framework.auth
 from datetime import datetime
 from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext
-from discord_slash.utils.manage_commands import create_choice, create_option
 from discord.ext.commands import *
-from discord.ext import tasks
 from framework.logger import Logger
 
 # User Configuration (edit stuff here)
-prefix = "-"  # Default prefix is -, you can replace it with your preferred prefix
 owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord username
 
 # Variables
-intents = discord.Intents.all()
 botVer = 'v1.2.1'
 if os.name == 'nt': os.system('cls')
 else: os.system('clear')
-client = commands.Bot(command_prefix=str(prefix), intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
-slash = SlashCommand(client, sync_commands=True)
+client = discord.Bot()  # READ COMMENT AT LINE 13 FOR MORE INFO
 global startTime
 startTime = time.time()
-client.remove_command('help')
 homedir = os.getcwd()
 config = {}
 
@@ -54,9 +47,9 @@ if os.name == "posix":
 
 logger = Logger(os.name, homedir)
 
-@client.command()
+@client.slash_command()
 async def help(ctx):
-    e = discord.Embed(title='Command Help', description=f'Prefix: `{prefix}`\n\n`{str(prefix)}snipe`: See the most recently deleted message in this channel.\n`{str(prefix)}editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
+    e = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
     await ctx.send(embed=e)
 
 # API Events
@@ -105,47 +98,29 @@ async def on_message_edit(message_before, message_after):
         else: pass
 
 # Commands
-@client.command()
+@client.slash_command(
+    name="snipe",
+    description="Fetch the latest deleted message in this channel."
+)
 async def snipe(ctx):
     channel = ctx.channel
     try:
         em = discord.Embed(title=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=discord.Color.random())
         em.set_footer(text=f"This message was sent by {snipe_message_author[channel.id]}")
-        await ctx.send(embed=em)
-    except KeyError: await ctx.send(f"There are no recently deleted messages in <#{channel.id}>")
+        await ctx.respond(embed=em)
+    except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{channel.id}>")
 
-@client.command()
+@client.slash_command(
+    name="editsnipe",
+    description="Fetch the latest edited message in this channel."
+)
 async def editsnipe(ctx):
     channel = ctx.channel
     try:
         em = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=discord.Color.random())
         em.set_footer(text=f'This message was edited by {editsnipe_message_author[channel.id]}')
-        await ctx.send(embed=em)
-    except KeyError: await ctx.reply(f'There are no recently edited messages in <#{ctx.channel.id}>')
-
-@slash.slash(
-    name="snipe",
-    description="Fetches the most-recently deleted message in this channel"
-)
-async def snipe(ctx: SlashContext):
-    channel = ctx.channel
-    try:
-        em = discord.Embed(title=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=discord.Color.random())
-        em.set_footer(text=f"This message was sent by {snipe_message_author[channel.id]}")
-        await ctx.send(embed=em)
-    except KeyError: await ctx.send(f"There are no recently deleted messages in <#{channel.id}>")
-
-@slash.slash(
-    name="editsnipe",
-    description="Fetches the most-recently edited message in this channel"
-)
-async def editsnipe(ctx: SlashContext):
-    channel = ctx.channel
-    try:
-        em = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=discord.Color.random())
-        em.set_footer(text=f'This message was edited by {editsnipe_message_author[channel.id]}')
-        await ctx.send(embed=em)
-    except KeyError: await ctx.reply(f'There are no recently edited messages in <#{ctx.channel.id}>')
+        await ctx.respond(embed=em)
+    except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 # Initialization
 token = framework.auth.get_token()
