@@ -1,4 +1,7 @@
 {
+  "auth": {
+    "token": ""
+  },
   "config": {
     "logs": {
       "snipe": true,
