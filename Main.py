@@ -1,4 +1,8 @@
-import os, time, os.path, discord, json
+import os
+import time
+import os.path
+import discord
+import json
 from datetime import datetime
 from discord.ext import commands
 from discord_slash import SlashCommand, SlashContext
