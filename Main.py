@@ -11,7 +11,6 @@ from discord.ext.commands import *
 from framework.logger import Logger
 
 # User Configuration (edit stuff here)
-prefix = "-"  # Default prefix is -, you can replace it with your preferred prefix
 owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord username
 
 # Variables
