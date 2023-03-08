@@ -1,11 +1,11 @@
 # Discord Snipe Bot
 ![Typing SVG](https://readme-typing-svg.herokuapp.com?color=%2336BCF7&lines=You+can+snipe+message+content;You+can+editsnipe+message+content)
 
-This is a bot made with the same message content sniping API from isobot and Arch bot.
-It's default prefix is -, however you can also set a custom prefix to your liking.
-To run it, go into the 'bot_token' variable in the 'USER CONFIG' part of the code. Enter your bot
-token inside the empty variable. You can get your Discord bot token from https://discord.com/developers.
-Also in the same part of the code, replace 'EMPTY_USERNAME#0000' in the owner variable with your Discord username.
+This is a bot made with the same message content sniping API from isobot and Arch bot. The bot uses built-in Discord slash commands (`/`), so all commands start with the `/` prefix.
+
+To run it, go into config.json in the project folder. Enter your bot token for the "token" value. You can get your Discord bot token from https://discord.com/developers.
+
+In the code, replace 'EMPTY_USERNAME#0000' in the `owner` variable with your Discord username. (found within the User Configuration section)
 
 # How to Use
 ### Installation
