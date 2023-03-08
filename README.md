@@ -31,4 +31,4 @@ $ python main.py
 • `/editsnipe` command to show the most recently edited message in a channel.
 
 ### If you have any new ideas for this bot, or want to report a bug, please make an [issue](https://github.com/notsniped/discord-snipe-bot/issues/new) and we'll get to it. If you want to contribute code to our repository, [pull requests](https://github.com/notsniped/discord-snipe-bot/pulls) are appreciated.
-<h6>Parts of README.md pulled from https://github.com/sniperking3335/heckerbot</h6>
+<h6>i use arch btw</h6>
