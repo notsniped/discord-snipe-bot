@@ -18,12 +18,12 @@ class Logger:
     def snipe(self, text: str):
         """Logs a sniped message to log file."""
         if os.name == "nt":
-            with open(f"{homedir}\\snipe-bot-data\\snipe.log", 'w+', encoding="utf-8") as file:
+            with open(f"{homedir}\\snipe-bot-data\\snipe.log", 'a', encoding="utf-8") as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
                 file.close()
         elif os.name == "posix":
-            with open(f"{homedir}/snipe-bot-data/snipe.log", 'w+', encoding="utf-8") as file:
+            with open(f"{homedir}/snipe-bot-data/snipe.log", 'a', encoding="utf-8") as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
                 file.close()
@@ -31,12 +31,12 @@ class Logger:
     def editsnipe(self, text: str):
         """Logs an edited message to log file."""
         if os.name == "nt":
-            with open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'w+', encoding="utf-8") as file:
+            with open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'a', encoding="utf-8") as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
                 file.close()
         elif os.name == "posix":
-            with open(f"{homedir}/snipe-bot-data/editsnipe.log", 'w+', encoding="utf-8") as file:
+            with open(f"{homedir}/snipe-bot-data/editsnipe.log", 'a', encoding="utf-8") as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
                 file.close()
@@ -44,12 +44,12 @@ class Logger:
     def error(self, text: str):
         """Logs an error message to log file."""
         if os.name == "nt":
-            with open(f"{homedir}\\snipe-bot-data\\errors.log", 'w+', encoding="utf-8") as file:
+            with open(f"{homedir}\\snipe-bot-data\\errors.log", 'a', encoding="utf-8") as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
                 file.close()
         elif os.name == "posix":
-            with open(f"{homedir}/snipe-bot-data/errors.log", 'w+', encoding="utf-8") as file:
+            with open(f"{homedir}/snipe-bot-data/errors.log", 'a', encoding="utf-8") as file:
                 # timestamp = datetime.now().strftime("%H:%M:%S")  Disable internal timestamp logging
                 file.write(f"{text}\n")
                 file.close()
