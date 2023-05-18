@@ -17,7 +17,9 @@ owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord
 botVer = 'v1.2.1'
 if os.name == 'nt': os.system('cls')
 else: os.system('clear')
-client = discord.Bot()  # READ COMMENT AT LINE 13 FOR MORE INFO
+intents = discord.Intents.default()
+intents.message_content = (True)
+client = discord.Bot(intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
 global startTime
 startTime = time.time()
 homedir = os.getcwd()
