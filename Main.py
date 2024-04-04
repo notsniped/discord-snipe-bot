@@ -20,7 +20,6 @@ intents.message_content = (True)
 client = discord.Bot(intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
 global startTime
 startTime = time.time()
-homedir = os.getcwd()
 config = auth.get_raw()
 
 # Pre-Initialization Commands
@@ -45,7 +44,7 @@ if os.name == "posix":
         open(f"{homedir}/snipe-bot-data/editsnipe.log", 'x', encoding="utf-8")
         open(f"{homedir}/snipe-bot-data/errors.log", 'x', encoding="utf-8")
 
-logger = Logger(os.name, homedir)
+logger = Logger(os.name, "")  # Inputting directory arg as "" because it is not required.
 
 @client.slash_command()
 async def help(ctx):
