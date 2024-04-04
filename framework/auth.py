@@ -22,7 +22,7 @@ class Auth:
                 tkn = input("[>] Enter your Discord bot token: ")
                 config["auth"]["token"] = str(tkn)
         if config["config"]["owner_name"] == "":
-            confirmation = input("[!] No owner name was detected in config.json. Would you like to add one?")
+            confirmation = input("[!] No owner name was detected in config.json. Would you like to add one? (Y/n): ")
             if confirmation.lower() == "yes" or confirmation.lower() == "y":
                 uname = input("[>] Enter your Discord username: ")
                 config["config"]["owner_name"] = str(uname)
