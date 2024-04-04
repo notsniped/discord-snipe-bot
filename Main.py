@@ -26,7 +26,7 @@ config = auth.get_raw()
 # Pre-Initialization Commands
 auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
 
-owner = framework.auth.get_owner_name()
+owner = auth.get_owner_name()
 
 if os.name == 'nt': 
     with open(f'{homedir}\\config.json', 'r', encoding="utf-8") as f: config = json.load(f)
