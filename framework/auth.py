@@ -34,6 +34,11 @@ class Auth:
         return config["auth"]["token"]
 
     def get_owner_name(self) -> str:
-        config = self.load()
         """Returns the owner's name as `str` from `config.json`."""
+        config = self.load()
         return config["config"]["owner_name"]
+    
+    def get_raw(self) -> dict:
+        """Returns all of the raw `dict` content of the `config.json` database."""
+        config = self.load()
+        return config
