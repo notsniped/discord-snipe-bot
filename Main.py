@@ -20,7 +20,6 @@ intents.message_content = (True)
 client = discord.Bot(intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
 global startTime
 startTime = time.time()
-homedir = os.getcwd()
 config = auth.get_raw()
 
 # Pre-Initialization Commands
@@ -28,29 +27,16 @@ auth.initial_setup()  # Check if bot token and owner username are missing and as
 
 owner = auth.get_owner_name()
 
-if os.name == 'nt': 
-    with open(f'{homedir}\\config.json', 'r', encoding="utf-8") as f: config = json.load(f)
-else: 
-    with open(f'{homedir}/config.json', 'r', encoding="utf-8") as f: config = json.load(f)
-
 snipe_log:bool = config[str("config")][str("logs")]["snipe"]
 editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
 
-if os.name == "nt":
-    if not os.path.isdir(f"{homedir}\\snipe-bot-data"):
-        os.mkdir(f"{homedir}\\snipe-bot-data")
-        # Making log files (mode 'x' creates new file in that path if it doesn't exist. Open file and do not write to it)
-        open(f"{homedir}\\snipe-bot-data\\snipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}\\snipe-bot-data\\errors.log", 'x', encoding="utf-8")
-if os.name == "posix":
-    if not os.path.isdir(f"{homedir}/snipe-bot-data"):
-        os.mkdir(f"{homedir}/snipe-bot-data")
-        open(f"{homedir}/snipe-bot-data/snipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}/snipe-bot-data/editsnipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}/snipe-bot-data/errors.log", 'x', encoding="utf-8")
+if not os.path.isdir("logs"):  # Create logs dir and all log files if they are missing from current working directory
+    os.mkdir("logs")
+    open("logs/snipe-bot-data/snipe.log", 'x', encoding="utf-8")
+    open("logs/snipe-bot-data/editsnipe.log", 'x', encoding="utf-8")
+    open("logs/snipe-bot-data/errors.log", 'x', encoding="utf-8")
 
-logger = Logger(os.name, homedir)
+logger = Logger(os.name, "")  # Inputting directory arg as "" because it is not required.
 
 @client.slash_command()
 async def help(ctx):
