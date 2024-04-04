@@ -10,10 +10,8 @@ from discord.ext import commands
 from discord.ext.commands import *
 from framework.logger import Logger
 
-# User Configuration (edit stuff here)
-owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord username
-
 # Variables
+auth = framework.auth.Auth()
 botVer = 'v1.2.1'
 if os.name == 'nt': os.system('cls')
 else: os.system('clear')
@@ -23,7 +21,12 @@ client = discord.Bot(intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
 global startTime
 startTime = time.time()
 homedir = os.getcwd()
-config = {}
+config = auth.get_raw()
+
+# Pre-Initialization Commands
+auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
+
+owner = framework.auth.get_owner_name()
 
 if os.name == 'nt': 
     with open(f'{homedir}\\config.json', 'r', encoding="utf-8") as f: config = json.load(f)
