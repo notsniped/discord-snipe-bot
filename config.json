@@ -1,11 +1,12 @@
 {
-  "auth": {
-    "token": ""
-  },
-  "config": {
-    "logs": {
-      "snipe": true,
-      "editsnipe": true
-    }
-  }
+  	"auth": {
+    	"token": ""
+  	},
+  	"config": {
+		"owner_name": "",
+    	"logs": {
+      	"snipe": true,
+      	"editsnipe": true
+    	}
+  	}
 }
