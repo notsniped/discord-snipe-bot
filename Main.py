@@ -28,11 +28,6 @@ auth.initial_setup()  # Check if bot token and owner username are missing and as
 
 owner = auth.get_owner_name()
 
-if os.name == 'nt': 
-    with open(f'{homedir}\\config.json', 'r', encoding="utf-8") as f: config = json.load(f)
-else: 
-    with open(f'{homedir}/config.json', 'r', encoding="utf-8") as f: config = json.load(f)
-
 snipe_log:bool = config[str("config")][str("logs")]["snipe"]
 editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
 
