@@ -26,7 +26,7 @@ class Auth:
             if confirmation.lower() == "yes" or confirmation.lower() == "y":
                 uname = input("[>] Enter your Discord username: ")
                 config["config"]["owner_name"] = str(uname)
-        self.save()
+        self.save(config)
 
     def get_token(self) -> str:
         """Returns the token stored in `config.json`."""
