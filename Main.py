@@ -32,9 +32,9 @@ editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
 
 if not os.path.isdir("logs"):  # Create logs dir and all log files if they are missing from current working directory
     os.mkdir("logs")
-    open("logs/snipe-bot-data/snipe.log", 'x', encoding="utf-8")
-    open("logs/snipe-bot-data/editsnipe.log", 'x', encoding="utf-8")
-    open("logs/snipe-bot-data/errors.log", 'x', encoding="utf-8")
+    open("logs/snipe.log", 'x', encoding="utf-8")
+    open("logs/editsnipe.log", 'x', encoding="utf-8")
+    open("logs/errors.log", 'x', encoding="utf-8")
 
 logger = Logger(os.name, "")  # Inputting directory arg as "" because it is not required.
 
