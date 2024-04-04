@@ -11,7 +11,7 @@ class Auth:
 
     def save(self, data: dict):
         """Dumps all cached content from memory into local storage."""
-        with open("config.json", 'w+', encoding="utf-8") as f: json.dump(data, f)
+        with open("config.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)
 
     def initial_setup(self):
         """Runs the bot's initial setup by generating a `config.json` file if missing, and asking for bot token/owner username if not provided."""
