@@ -30,19 +30,11 @@ owner = auth.get_owner_name()
 snipe_log:bool = config[str("config")][str("logs")]["snipe"]
 editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
 
-if os.name == "nt":
-    if not os.path.isdir(f"{homedir}\\snipe-bot-data"):
-        os.mkdir(f"{homedir}\\snipe-bot-data")
-        # Making log files (mode 'x' creates new file in that path if it doesn't exist. Open file and do not write to it)
-        open(f"{homedir}\\snipe-bot-data\\snipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}\\snipe-bot-data\\editsnipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}\\snipe-bot-data\\errors.log", 'x', encoding="utf-8")
-if os.name == "posix":
-    if not os.path.isdir(f"{homedir}/snipe-bot-data"):
-        os.mkdir(f"{homedir}/snipe-bot-data")
-        open(f"{homedir}/snipe-bot-data/snipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}/snipe-bot-data/editsnipe.log", 'x', encoding="utf-8")
-        open(f"{homedir}/snipe-bot-data/errors.log", 'x', encoding="utf-8")
+if not os.path.isdir("logs"):  # Create logs dir and all log files if they are missing from current working directory
+    os.mkdir("logs")
+    open("logs/snipe-bot-data/snipe.log", 'x', encoding="utf-8")
+    open("logs/snipe-bot-data/editsnipe.log", 'x', encoding="utf-8")
+    open("logs/snipe-bot-data/errors.log", 'x', encoding="utf-8")
 
 logger = Logger(os.name, "")  # Inputting directory arg as "" because it is not required.
 
