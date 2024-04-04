@@ -128,12 +128,8 @@ async def editsnipe(ctx):
     except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 # Initialization
-token = framework.auth.get_token()
-if token != "": 
-    try: client.run(token)
-    except Exception as exc:
-        print(f"[main/CLIENT] Error: Unable to start client: {type(exc).__name__}: {exc}")
-        raise SystemExit
-else:
-    print("[main/CLIENT] Error: Unable to start client: No Discord bot token found. Please insert one in the \"token\" value in the config.json file and try again.\nYou can get a Discord bot token from https://discord.com/developers by making a new application.")
+token = auth.get_token()
+try: client.run(token)
+except Exception as exc:
+    print(f"[main/CLIENT] Error: Unable to start client: {type(exc).__name__}: {exc}")
     raise SystemExit
