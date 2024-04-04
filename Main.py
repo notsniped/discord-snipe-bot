@@ -10,10 +10,8 @@ from discord.ext import commands
 from discord.ext.commands import *
 from framework.logger import Logger
 
-# User Configuration (edit stuff here)
-owner = "EMPTY_USERNAME#0000"  # Replace 'EMPTY_USERNAME#0000' with your Discord username
-
 # Variables
+auth = framework.auth.Auth()
 botVer = 'v1.2.1'
 if os.name == 'nt': os.system('cls')
 else: os.system('clear')
@@ -23,7 +21,12 @@ client = discord.Bot(intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
 global startTime
 startTime = time.time()
 homedir = os.getcwd()
-config = {}
+config = auth.get_raw()
+
+# Pre-Initialization Commands
+auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
+
+owner = auth.get_owner_name()
 
 if os.name == 'nt': 
     with open(f'{homedir}\\config.json', 'r', encoding="utf-8") as f: config = json.load(f)
@@ -125,12 +128,8 @@ async def editsnipe(ctx):
     except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 # Initialization
-token = framework.auth.get_token()
-if token != "": 
-    try: client.run(token)
-    except Exception as exc:
-        print(f"[main/CLIENT] Error: Unable to start client: {type(exc).__name__}: {exc}")
-        raise SystemExit
-else:
-    print("[main/CLIENT] Error: Unable to start client: No Discord bot token found. Please insert one in the \"token\" value in the config.json file and try again.\nYou can get a Discord bot token from https://discord.com/developers by making a new application.")
+token = auth.get_token()
+try: client.run(token)
+except Exception as exc:
+    print(f"[main/CLIENT] Error: Unable to start client: {type(exc).__name__}: {exc}")
     raise SystemExit
