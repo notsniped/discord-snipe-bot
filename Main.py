@@ -64,7 +64,7 @@ async def on_message_delete(message):
             "author": message.author,
             "content": message.content,
             "author_name": message.author,
-            "time_stamp": str(dts)
+            "time_stamp": str(round(dts))
         }
         if bool(snipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
@@ -81,7 +81,7 @@ async def on_message_edit(message_before, message_after):
             "original_content": message_before.content,
             "edited_content": message_after.content,
             "author_name": message_before.author,
-            "time_stamp": str(dts)
+            "time_stamp": str(round(dts))
         }
         if bool(editsnipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
