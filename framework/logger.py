@@ -5,7 +5,7 @@ import datetime
 class Logger:
     """A class used for logging important new snipe and editsnipe entries, as well as errors."""
     def __init__(self):
-        start_timestamp = datetime.time().strftime('%H:%M:%S')
+        start_timestamp = datetime.now().strftime('%H:%M:%S')
         print(f"[{start_timestamp}] Logging initialized.")
 
     def snipe(self, text: str):
