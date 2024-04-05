@@ -7,9 +7,7 @@ When you run the bot for the first time, you will go through the client's initia
 
 # How to Use
 ### Installation
-To install for windows, run win_cmd_install.bat.
-
-If you are on a machine running GNU/Linux, run linux_installer.sh.
+No pre-run installation is required, as all the libraries that the bot needs are already packaged into Discord Snipe Bot. Just to make it easier for you :)
 
 ### Running
 Run this code in command prompt/terminal:
