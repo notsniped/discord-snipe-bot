@@ -7,7 +7,7 @@ import json
 import framework.auth
 import framework.logger
 from datetime import datetime
-from discord import ApplicationContext
+from discord import ApplicationContext, option
 from discord.ext import commands
 from discord.ext.commands import *
 
@@ -57,10 +57,17 @@ async def on_ready():
     print('====================')
 
 @client.event
+async def on_message(ctx):
+    with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)
+    if str(ctx.guild.id) not in data["audit_channel"]:
+        data["audit_channel"][str(ctx.guild.id)] = None
+    with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)
+
+@client.event
 async def on_message_delete(message):
     if not message.author.bot:
         dts = time.time()
-        author_name: str = message.author
+        author_name: str = message.author.name
         author_name_split = author_name.split("#")
         if author_name_split[-1] == 0:
             author_name = author_name_split[0]
@@ -74,12 +81,18 @@ async def on_message_delete(message):
             print(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}):\n   Message content: {message.content}")
             logger.snipe(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}): {message.content}")
         else: pass
+        with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)
+        if data["audit_channel"][str(message.guild.id)] is not None:
+            localembed = discord.Embed(title=f"Message deleted in #{message.channel.name} <t:{round(dts)}:R>", description=message.content, color=discord.Color.red())
+            localembed.set_footer(text=f"This message was sent by {author_name}")
+            channel = client.get_channel(data["audit_channel"][str(message.guild.id)])
+            await channel.send(embed=localembed)
 
 @client.event
 async def on_message_edit(message_before, message_after):
     if not message_after.author.bot:
         dts = time.time()
-        author_name: str = message_before.author
+        author_name: str = message_before.author.name
         author_name_split = author_name.split("#")
         if author_name_split[-1] == 0:
             author_name = author_name_split[0]
@@ -94,6 +107,12 @@ async def on_message_edit(message_before, message_after):
             print(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
             logger.editsnipe(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
         else: pass
+        with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)
+        if data["audit_channel"][str(message_before.guild.id)] is not None:
+            localembed = discord.Embed(title=f"Message edited in #{message_before.channel.name} <t:{round(dts)}:R>", description=f'**Message before**:```{message_before.content}```\n**Message after**:```{message_after.content}```', color=discord.Color.orange())
+            localembed.set_footer(text=f"This message was edited by {author_name}")
+            channel = client.get_channel(data["audit_channel"][str(message_before.guild.id)])
+            await channel.send(embed=localembed)
 
 # Commands
 @client.slash_command(
@@ -127,6 +146,21 @@ async def editsnipe(ctx: ApplicationContext):
         localembed.set_footer(text=f"This message was edited by {data['author_name']}")
         await ctx.respond(embed=localembed)
     except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
+
+@client.slash_command(
+    name="set_audit_channel",
+    description="Set a channel to send all deleted and edited messages to."
+)
+@commands.has_permissions(manage_channels=True)
+@option(name="channel", description="The channel that you want to set for audit logs.", type=discord.TextChannel)
+async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChannel):
+    """Set a channel to send all deleted and edited messages to."""
+    try:
+        with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)  # Load bot database temporarily into a new variable
+        data["audit_channel"][str(ctx.guild_id)] = channel.id
+        with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)  # Save modified datbaase to local machine
+        return await ctx.respond(f"**{ctx.guild.name}**'s audit log channel has been successfully set to {channel.mention}.")
+    except MissingPermissions: return await ctx.respond("You can't use this command!", ephemeral=True)
 
 # Initialization
 token = auth.get_token()
