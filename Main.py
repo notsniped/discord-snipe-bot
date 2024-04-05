@@ -152,14 +152,15 @@ async def editsnipe(ctx: ApplicationContext):
     description="Set a channel to send all deleted and edited messages to."
 )
 @commands.has_permissions(manage_channels=True)
-@option(name="channel", description="The channel that you want to set for audit logs.", type=discord.TextChannel)
+@option(name="channel", description="The channel that you want to set for audit logs. (leave blank to disable audit logging)", type=discord.TextChannel, default=None)
 async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChannel):
     """Set a channel to send all deleted and edited messages to."""
     try:
         with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)  # Load bot database temporarily into a new variable
         data["audit_channel"][str(ctx.guild_id)] = channel.id
         with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)  # Save modified datbaase to local machine
-        return await ctx.respond(f"**{ctx.guild.name}**'s audit log channel has been successfully set to {channel.mention}.")
+        if channel is not None: await ctx.respond(f"**{ctx.guild.name}**'s audit log channel has been successfully set to {channel.mention}.")
+        else: await ctx.respond(f"Deleted/Edited message audit logging for **{ctx.guild.name}** has been successfully disabled.")
     except MissingPermissions: return await ctx.respond("You can't use this command!", ephemeral=True)
 
 # Initialization
