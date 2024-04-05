@@ -23,6 +23,13 @@ global startTime
 startTime = time.time()
 config = auth.get_raw()
 
+# Initialize dicts for snipe and editsnipe data
+snipe_message_content = {}
+snipe_message_author = {}
+editsnipe_message_before_content = {}
+editsnipe_message_after_content = {}
+editsnipe_message_author = {}
+
 # Pre-Initialization Commands
 auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
 
@@ -51,12 +58,6 @@ async def on_ready():
     print(f'  Owner: {str(owner)}')
     print('------------------')
     print('====================')
-
-snipe_message_content = {}
-snipe_message_author = {}
-editsnipe_message_before_content = {}
-editsnipe_message_after_content = {}
-editsnipe_message_author = {}
 
 @client.event
 async def on_message_delete(message):
