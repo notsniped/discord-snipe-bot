@@ -159,8 +159,13 @@ async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChanne
         with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)  # Load bot database temporarily into a new variable
         data["audit_channel"][str(ctx.guild_id)] = channel.id
         with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)  # Save modified datbaase to local machine
-        if channel is not None: await ctx.respond(f"**{ctx.guild.name}**'s audit log channel has been successfully set to {channel.mention}.")
-        else: await ctx.respond(f"Deleted/Edited message audit logging for **{ctx.guild.name}** has been successfully disabled.")
+        if channel is not None:
+            localembed = discord.Embed(description=f"**{ctx.guild.name}**'s audit log channel has been successfully set to {channel.mention}.", color=discord.Color.green())
+            await ctx.respond(embed=localembed, ephemeral=True)
+        else:
+            localembed = discord.Embed(description=f"Deleted/Edited message audit logging for **{ctx.guild.name}** has been successfully disabled.", color=discord.Color.green())
+            await ctx.respond(embed=localembed, ephemeral=True)
+
     except MissingPermissions: return await ctx.respond("You can't use this command!", ephemeral=True)
 
 # Initialization
