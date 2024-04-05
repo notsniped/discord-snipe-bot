@@ -60,10 +60,13 @@ async def on_ready():
 async def on_message_delete(message):
     if not message.author.bot:
         dts = time.time()
+        author_name: str = message.author
+        author_name_split = author_name.split("#")
+        if author_name_split[-1] == 0:
+            author_name = author_name_split[0]
         snipe_data[str(message.channel.id)] = {
-            "author": message.author,
             "content": message.content,
-            "author_name": message.author,
+            "author_name": author_name,
             "time_stamp": str(round(dts))
         }
         if bool(snipe_log):
@@ -76,11 +79,14 @@ async def on_message_delete(message):
 async def on_message_edit(message_before, message_after):
     if not message_after.author.bot:
         dts = time.time()
+        author_name: str = message_before.author
+        author_name_split = author_name.split("#")
+        if author_name_split[-1] == 0:
+            author_name = author_name_split[0]
         editsnipe_data[str(message_before.channel.id)] = {
-            "message_author": message_before.author,
             "original_content": message_before.content,
             "edited_content": message_after.content,
-            "author_name": message_before.author,
+            "author_name": author_name,
             "time_stamp": str(round(dts))
         }
         if bool(editsnipe_log):
