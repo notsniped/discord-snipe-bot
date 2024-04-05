@@ -21,6 +21,13 @@ When you run this, the client will ask you to input a **Discord bot token** and 
 
 (you can get a bot token from making a new application at https://discord.com/developers)
 
+**NOTE:** Before running the program, remember to enable the `Message Content Intent` in your Application's Bot Settings. Otherwise the bot won't be able to read any messages and it will not work.
+
+![image](https://github.com/notsniped/discord-snipe-bot/assets/72265661/0b614f53-7626-459b-a727-d192a000565b)
+
+![image](https://github.com/notsniped/discord-snipe-bot/assets/72265661/db034c75-2ac6-458e-a67b-72456f3a8bbf)
+
+
 # Features
 - `/snipe` command to show the most recently deleted message in a channel.
 
