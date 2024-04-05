@@ -3,9 +3,7 @@
 
 This is a bot made with the same message content sniping API from isobot and Arch bot. The bot uses built-in Discord slash commands (`/`), so all commands start with the `/` prefix.
 
-To run it, go into config.json in the project folder. Enter your bot token for the "token" value. You can get your Discord bot token from https://discord.com/developers.
-
-In the code, replace 'EMPTY_USERNAME#0000' in the `owner` variable with your Discord username. (found within the User Configuration section)
+When you run the bot for the first time, you will go through the client's initial setup process, which allows you to enter the bot token and the owner's username. No fiddling required.
 
 # How to Use
 ### Installation
