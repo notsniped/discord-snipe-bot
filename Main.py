@@ -89,8 +89,8 @@ async def on_message_edit(message_before, message_after):
     description="Need some help?"
 )
 async def help(ctx):
-    e = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
-    await ctx.send(embed=e)
+    localembed = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
+    await ctx.send(embed=localembed)
 
 @client.slash_command(
     name="snipe",
@@ -99,9 +99,9 @@ async def help(ctx):
 async def snipe(ctx):
     channel = ctx.channel
     try:
-        em = discord.Embed(title=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=discord.Color.random())
-        em.set_footer(text=f"This message was sent by {snipe_message_author[channel.id]}")
-        await ctx.respond(embed=em)
+        localembed = discord.Embed(title=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=discord.Color.random())
+        localembed.set_footer(text=f"This message was sent by {snipe_message_author[channel.id]}")
+        await ctx.respond(embed=localembed)
     except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{channel.id}>")
 
 @client.slash_command(
@@ -111,9 +111,9 @@ async def snipe(ctx):
 async def editsnipe(ctx):
     channel = ctx.channel
     try:
-        em = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=discord.Color.random())
-        em.set_footer(text=f'This message was edited by {editsnipe_message_author[channel.id]}')
-        await ctx.respond(embed=em)
+        localembed = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=discord.Color.random())
+        localembed.set_footer(text=f'This message was edited by {editsnipe_message_author[channel.id]}')
+        await ctx.respond(embed=localembed)
     except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 # Initialization
