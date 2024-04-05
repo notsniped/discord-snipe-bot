@@ -153,11 +153,12 @@ async def editsnipe(ctx: ApplicationContext):
 )
 @commands.has_permissions(manage_channels=True)
 @option(name="channel", description="The channel that you want to set for audit logs. (leave blank to disable audit logging)", type=discord.TextChannel, default=None)
-async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChannel):
+async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChannel = None):
     """Set a channel to send all deleted and edited messages to."""
     try:
         with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)  # Load bot database temporarily into a new variable
-        data["audit_channel"][str(ctx.guild_id)] = channel.id
+        if channel is not None: data["audit_channel"][str(ctx.guild_id)] = channel.id
+        else: data["audit_channel"][str(ctx.guild_id)] = None
         with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)  # Save modified datbaase to local machine
         if channel is not None:
             localembed = discord.Embed(description=f"**{ctx.guild.name}**'s audit log channel has been successfully set to {channel.mention}.", color=discord.Color.green())
