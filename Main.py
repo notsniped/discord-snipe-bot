@@ -106,7 +106,7 @@ async def snipe(ctx: ApplicationContext):
     try:
         data = snipe_data[str(ctx.channel.id)]
         localembed = discord.Embed(title=f"Last deleted message in #{ctx.channel.name}", description=data["content"], color=discord.Color.random())
-        localembed.set_footer(text=f"This message was sent by {data["author_name"]}  <t:{data["time_stamp"]}:R>")
+        localembed.set_footer(text=f"This message was sent by {data['author_name']}  <t:{data['time_stamp']}:R>")
         await ctx.respond(embed=localembed)
     except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{ctx.channel.id}>")
 
@@ -118,7 +118,7 @@ async def editsnipe(ctx: ApplicationContext):
     try:
         data = editsnipe_data[str(ctx.channel.id)]
         localembed = discord.Embed(title=f"Last edited message in #{ctx.channel.name}", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
-        localembed.set_footer(text=f'This message was edited by {data["author_name"]} <t:{data["time_stamp"]}:R>')
+        localembed.set_footer(text=f"This message was edited by {data['author_name']} <t:{data['time_stamp']}:R>")
         await ctx.respond(embed=localembed)
     except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
