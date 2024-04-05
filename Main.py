@@ -162,6 +162,10 @@ async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChanne
         if channel is not None:
             localembed = discord.Embed(description=f"**{ctx.guild.name}**'s audit log channel has been successfully set to {channel.mention}.", color=discord.Color.green())
             await ctx.respond(embed=localembed, ephemeral=True)
+            channel_ctx = client.get_channel(channel)
+            localembed1 = discord.Embed(title="Audit Channel Set", description="This channel has been set as this server's audit log channel.\nThis means that all deleted and edited message audit logs will appear here.\n\nIf you would like to turn these off, run `/set_audit_channel`.", color=discord.Color.random())
+            localembed1.set_footer(icon_url=ctx.author.avatar, text=f"This action has been performed by {ctx.author.display_name}")
+            await channel_ctx.send(embed=localembed1)
         else:
             localembed = discord.Embed(description=f"Deleted/Edited message audit logging for **{ctx.guild.name}** has been successfully disabled.", color=discord.Color.green())
             await ctx.respond(embed=localembed, ephemeral=True)
