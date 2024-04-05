@@ -18,10 +18,10 @@ Run this code in command prompt/terminal:
 
 ```
 $ cd path/to/folder/
-$ python main.py
+$ python Main.py
 ```
 
-**However before running this,** make sure you insert a Discord bot token in the `config.json` file.
+When you run this, the client will ask you to input a **Discord bot token** and your **Discord username**. Simply paste them into the prompts during the setup process.
 
 (you can get a bot token from making a new application at https://discord.com/developers)
 
