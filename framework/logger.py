@@ -1,14 +1,10 @@
 # Imports
-import os
-import os.path
 import datetime
 
 # Classes and Functions
 class Logger:
-    """A class used for logging important information and alerts."""
-    def __init__(self, os_name: str, directory: str):
-        self.os_name = os_name
-        self.directory = directory
+    """A class used for logging important new snipe and editsnipe entries, as well as errors."""
+    def __init__(self):
         start_timestamp = datetime.time().strftime('%H:%M:%S')
         print(f"[{start_timestamp}] Logging initialized.")
 

@@ -5,11 +5,11 @@ import os.path
 import discord
 import json
 import framework.auth
+import framework.logger
 from datetime import datetime
 from discord import ApplicationContext
 from discord.ext import commands
 from discord.ext.commands import *
-from framework.logger import Logger
 
 # Variables
 auth = framework.auth.Auth()
@@ -37,7 +37,7 @@ if not os.path.isdir("logs"):  # Create logs dir and all log files if they are m
     open("logs/editsnipe.log", 'x', encoding="utf-8")
     open("logs/errors.log", 'x', encoding="utf-8")
 
-logger = Logger(os.name, "")  # Inputting directory arg as "" because it is not required.
+logger = framework.logger.Logger()
 
 # API Events
 @client.event
