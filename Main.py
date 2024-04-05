@@ -37,7 +37,7 @@ if not os.path.isdir("logs"):  # Create logs dir and all log files if they are m
     open("logs/editsnipe.log", 'x', encoding="utf-8")
     open("logs/errors.log", 'x', encoding="utf-8")
 
-logger = Logger(os.name, "")  # Inputting directory arg as "" because it is not required.
+logger = Logger()
 
 # API Events
 @client.event
