@@ -1,6 +1,4 @@
 # Imports
-import os
-import os.path
 import datetime
 
 # Classes and Functions
