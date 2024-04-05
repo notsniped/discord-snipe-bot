@@ -18,7 +18,7 @@ if os.name == 'nt': os.system('cls')
 else: os.system('clear')
 intents = discord.Intents.default()
 intents.message_content = (True)
-client = discord.Bot(intents=intents)  # READ COMMENT AT LINE 13 FOR MORE INFO
+client = discord.Bot(intents=intents)
 global startTime
 startTime = time.time()
 config = auth.get_raw()
