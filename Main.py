@@ -6,6 +6,7 @@ import discord
 import json
 import framework.auth
 from datetime import datetime
+from discord import ApplicationContext
 from discord.ext import commands
 from discord.ext.commands import *
 from framework.logger import Logger
@@ -88,7 +89,7 @@ async def on_message_edit(message_before, message_after):
     name="help",
     description="Need some help?"
 )
-async def help(ctx):
+async def help(ctx: ApplicationContext):
     localembed = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
     await ctx.send(embed=localembed)
 
@@ -96,7 +97,7 @@ async def help(ctx):
     name="snipe",
     description="Fetch the latest deleted message in this channel."
 )
-async def snipe(ctx):
+async def snipe(ctx: ApplicationContext):
     channel = ctx.channel
     try:
         localembed = discord.Embed(title=f"Last deleted message in #{channel.name}", description=snipe_message_content[channel.id], color=discord.Color.random())
@@ -108,7 +109,7 @@ async def snipe(ctx):
     name="editsnipe",
     description="Fetch the latest edited message in this channel."
 )
-async def editsnipe(ctx):
+async def editsnipe(ctx: ApplicationContext):
     channel = ctx.channel
     try:
         localembed = discord.Embed(description=f'**Message before**:```{editsnipe_message_before_content[ctx.channel.id]}```\n**Message after**:```{editsnipe_message_after_content[ctx.channel.id]}```', color=discord.Color.random())
