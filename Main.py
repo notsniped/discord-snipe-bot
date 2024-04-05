@@ -38,11 +38,6 @@ if not os.path.isdir("logs"):  # Create logs dir and all log files if they are m
 
 logger = Logger(os.name, "")  # Inputting directory arg as "" because it is not required.
 
-@client.slash_command()
-async def help(ctx):
-    e = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
-    await ctx.send(embed=e)
-
 # API Events
 @client.event
 async def on_ready():
@@ -89,6 +84,14 @@ async def on_message_edit(message_before, message_after):
         else: pass
 
 # Commands
+@client.slash_command(
+    name="help",
+    description="Need some help?"
+)
+async def help(ctx):
+    e = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.', color=discord.Color.random())
+    await ctx.send(embed=e)
+
 @client.slash_command(
     name="snipe",
     description="Fetch the latest deleted message in this channel."
