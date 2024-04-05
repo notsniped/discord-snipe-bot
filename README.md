@@ -22,9 +22,11 @@ When you run this, the client will ask you to input a **Discord bot token** and 
 (you can get a bot token from making a new application at https://discord.com/developers)
 
 # Features
-• `/snipe` command to show the most recently deleted message in a channel.
+- `/snipe` command to show the most recently deleted message in a channel.
 
-• `/editsnipe` command to show the most recently edited message in a channel.
+- `/editsnipe` command to show the most recently edited message in a channel.
+
+- Deleted and edited message audit logging channel features for server mods. (`/set_audit_channel`)
 
 ### If you have any new ideas for this bot, or want to report a bug, please make an [issue](https://github.com/notsniped/discord-snipe-bot/issues/new) and we'll get to it. If you want to contribute code to our repository, [pull requests](https://github.com/notsniped/discord-snipe-bot/pulls) are appreciated.
 <h6>i use arch btw</h6>
