@@ -1,5 +1,5 @@
 # Imports
-import datetime
+from datetime import datetime
 
 # Classes and Functions
 class Logger:
