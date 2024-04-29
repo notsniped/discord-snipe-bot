@@ -209,14 +209,23 @@ async def snipe(ctx: ApplicationContext, user: discord.User = None):
     name="editsnipe",
     description="Fetch the latest edited message in this channel."
 )
-async def editsnipe(ctx: ApplicationContext):
+@option(name="user", description="Editsnipe message content in the channel from a specific user.", type=discord.User, default=None)
+async def editsnipe(ctx: ApplicationContext, user: discord.Member):
     """Fetch the latest edited message in this channel."""
-    try:
-        data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)]["latest"]
-        localembed = discord.Embed(title=f"Last edited message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
-        localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was edited by {data['author_name']}")
-        await ctx.respond(embed=localembed)
-    except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
+    if user is not None:
+        try:
+            data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)][str(user.id)]
+            localembed = discord.Embed(title=f"Last edited message from **{user.display_name}** in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
+            localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was edited by {data['author_name']}")
+            await ctx.respond(embed=localembed)
+        except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}> from {user.display_name}')
+    else:
+        try:
+            data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)]["latest"]
+            localembed = discord.Embed(title=f"Last edited message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
+            localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was edited by {data['author_name']}")
+            await ctx.respond(embed=localembed)
+        except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 @client.slash_command(
     name="set_audit_channel",
