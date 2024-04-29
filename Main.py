@@ -23,25 +23,35 @@ global startTime
 startTime = time.time()
 config = auth.get_raw()
 
-# Initialize dicts for snipe and editsnipe data
-snipe_data = {}
-editsnipe_data = {}
-
 # Pre-Initialization Commands
 auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
 
 owner = auth.get_owner_name()
 
-snipe_log:bool = config[str("config")][str("logs")]["snipe"]
-editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
-
-if not os.path.isdir("logs"):  # Create logs dir and all log files if they are missing from current working directory
-    os.mkdir("logs")
-    open("logs/snipe.log", 'x', encoding="utf-8")
-    open("logs/editsnipe.log", 'x', encoding="utf-8")
-    open("logs/errors.log", 'x', encoding="utf-8")
+snipe_log: bool = config[str("config")][str("logs")]["snipe"]
+editsnipe_log: bool = config[str("config")][str("logs")]["editsnipe"]
 
 logger = framework.logger.Logger()
+
+# Initialize dicts for snipe and editsnipe data
+with open("snipe.json", 'r', encoding="utf-8") as f:
+    snipe_data: dict = json.load(f)
+
+with open("editsnipe.json", 'r', encoding="utf-8") as f:
+    editsnipe_data: dict = json.load(f)
+
+def save():
+    """Dumps the latest cached data of the databases to local storage."""
+    with open("snipe.json", 'w+', encoding="utf-8") as f:
+        json.dump(snipe_data, f, indent=4)
+
+    with open("editsnipe.json", 'w+', encoding="utf-8") as f:
+        json.dump(editsnipe_data, f, indent=4)
+
+def generate_data_entries(guild_id: int) -> int:
+    if str(guild_id) not in snipe_data:
+        snipe_data[str(guild_id)] = {}
+    save()
 
 # API Events
 @client.event
@@ -63,10 +73,16 @@ async def on_message(ctx):
         data["audit_channel"][str(ctx.guild.id)] = None
     with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)
 
+    generate_data_entries(ctx.guild.id)
+
 @client.event
 async def on_message_delete(message):
     if not message.author.bot:
+        generate_data_entries(message.guild.id)
+
         dts = time.time()
+
+        # Perform formatting for new Discord usernames.
         author_name: str = message.author.name
         author_name_split = author_name.split("#")
         if author_name_split[-1] == 0:
