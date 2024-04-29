@@ -201,8 +201,9 @@ async def snipe(ctx: ApplicationContext):
     description="Fetch the latest edited message in this channel."
 )
 async def editsnipe(ctx: ApplicationContext):
+    """Fetch the latest edited message in this channel."""
     try:
-        data = editsnipe_data[str(ctx.channel.id)]
+        data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)]["latest"]
         localembed = discord.Embed(title=f"Last edited message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
         localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was edited by {data['author_name']}")
         await ctx.respond(embed=localembed)
