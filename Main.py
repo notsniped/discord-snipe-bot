@@ -14,8 +14,6 @@ from discord.ext.commands import *
 # Variables
 auth = framework.auth.Auth()
 botVer = 'v1.2.1'
-if os.name == 'nt': os.system('cls')
-else: os.system('clear')
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Bot(intents=intents)
