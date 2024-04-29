@@ -19,7 +19,6 @@ else: os.system('clear')
 intents = discord.Intents.default()
 intents.message_content = (True)
 client = discord.Bot(intents=intents)
-global startTime
 startTime = time.time()
 config = auth.get_raw()
 
