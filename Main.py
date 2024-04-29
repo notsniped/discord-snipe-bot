@@ -21,6 +21,8 @@ intents.message_content = True
 client = discord.Bot(intents=intents)
 startTime = time.time()
 config = auth.get_raw()
+owner = auth.get_owner_name()
+logger = framework.logger.Logger()
 
 # Pre-Initialization Commands
 def create_files():
@@ -44,28 +46,18 @@ def create_files():
 create_files()
 auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
 
-owner = auth.get_owner_name()
-
+# Load configurations for snipe and editsnipe logging
 snipe_log: bool = config[str("config")][str("logs")]["snipe"]
 editsnipe_log: bool = config[str("config")][str("logs")]["editsnipe"]
 
-logger = framework.logger.Logger()
-
-def format_username(username: str) -> str:
-    """Formats the new Discord usernames by clearing the trailing `#0` from them (because the API returns them as `#0`)"""
-    author_name: str = username
-    author_name_split = author_name.split("#")
-    if author_name_split[-1] == 0:
-        author_name = author_name_split[0]
-    return author_name
-
-# Initialize dicts for snipe and editsnipe data
+# Initialize snipe and editsnipe databases
 with open("snipe.json", 'r', encoding="utf-8") as f:
     snipe_data: dict = json.load(f)
 
 with open("editsnipe.json", 'r', encoding="utf-8") as f:
     editsnipe_data: dict = json.load(f)
 
+# Functions
 def save():
     """Dumps the latest cached data of the databases to local storage."""
     with open("snipe.json", 'w+', encoding="utf-8") as f:
@@ -86,6 +78,14 @@ def generate_data_entries(guild_id: int, channel_id: int) -> int:
         editsnipe_data[str(guild_id)][str(channel_id)] = {}
     save()
     return 0
+
+def format_username(username: str) -> str:
+    """Formats the new Discord usernames by clearing the trailing `#0` from them (because the API returns them as `#0`)"""
+    author_name: str = username
+    author_name_split = author_name.split("#")
+    if author_name_split[-1] == 0:
+        author_name = author_name_split[0]
+    return author_name
 
 # API Events
 @client.event
