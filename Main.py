@@ -136,22 +136,37 @@ async def on_message_delete(message):
 @client.event
 async def on_message_edit(message_before, message_after):
     if not message_after.author.bot:
+        generate_data_entries(message_before.guild.id)
+
         dts = time.time()
+
+        # Perform formatting for new Discord usernames.
         author_name: str = message_before.author.name
         author_name_split = author_name.split("#")
         if author_name_split[-1] == 0:
             author_name = author_name_split[0]
-        editsnipe_data[str(message_before.channel.id)] = {
+
+        # Save the edited message content to database
+        editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)]["latest"] = {
             "original_content": message_before.content,
             "edited_content": message_after.content,
             "author_name": author_name,
             "time_stamp": str(round(dts))
         }
+        editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)][str(message_before.author.id)] = {
+            "original_content": message_before.content,
+            "edited_content": message_after.content,
+            "author_name": author_name,
+            "time_stamp": str(round(dts))
+        }
+
+        # Log the edited message content to the client deleted message log.
         if bool(editsnipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
             print(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
             logger.editsnipe(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
-        else: pass
+
+        # Send the edited message content to audit logging channel
         with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)
         if data["audit_channel"][str(message_before.guild.id)] is not None:
             localembed = discord.Embed(title=f"Message edited in #{message_before.channel.name} <t:{round(dts)}:R>", description=f'**Message before**:```{message_before.content}```\n**Message after**:```{message_after.content}```', color=discord.Color.orange())
