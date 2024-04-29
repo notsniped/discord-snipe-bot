@@ -118,6 +118,7 @@ async def on_message_delete(message):
             "author_name": author_name,
             "time_stamp": str(round(dts))
         }
+        save()
 
         # Log the edited message content to the client deleted message log.
         if bool(snipe_log):
@@ -159,6 +160,7 @@ async def on_message_edit(message_before, message_after):
             "author_name": author_name,
             "time_stamp": str(round(dts))
         }
+        save()
 
         # Log the edited message content to the client deleted message log.
         if bool(editsnipe_log):
