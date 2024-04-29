@@ -52,6 +52,14 @@ editsnipe_log: bool = config[str("config")][str("logs")]["editsnipe"]
 
 logger = framework.logger.Logger()
 
+def format_username(username: str) -> str:
+    """Formats the new Discord usernames by clearing the trailing `#0` from them (because the API returns them as `#0`)"""
+    author_name: str = username
+    author_name_split = author_name.split("#")
+    if author_name_split[-1] == 0:
+        author_name = author_name_split[0]
+    return author_name
+
 # Initialize dicts for snipe and editsnipe data
 with open("snipe.json", 'r', encoding="utf-8") as f:
     snipe_data: dict = json.load(f)
@@ -110,10 +118,7 @@ async def on_message_delete(message):
         dts = time.time()
 
         # Perform formatting for new Discord usernames.
-        author_name: str = message.author.name
-        author_name_split = author_name.split("#")
-        if author_name_split[-1] == 0:
-            author_name = author_name_split[0]
+        author_name: str = format_username(message.author.name)
 
         # Save the deleted message content to database
         snipe_data[str(message.guild.id)][str(message.channel.id)]["latest"] = {
@@ -150,10 +155,7 @@ async def on_message_edit(message_before, message_after):
         dts = time.time()
 
         # Perform formatting for new Discord usernames.
-        author_name: str = message_before.author.name
-        author_name_split = author_name.split("#")
-        if author_name_split[-1] == 0:
-            author_name = author_name_split[0]
+        author_name: str = format_username(message_before.author.name)
 
         # Save the edited message content to database
         editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)]["latest"] = {
