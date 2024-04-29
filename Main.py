@@ -123,12 +123,12 @@ async def on_message_delete(message):
         # Save the deleted message content to database
         snipe_data[str(message.guild.id)][str(message.channel.id)]["latest"] = {
             "content": message.content,
-            "author_name": author_name,
+            "author_id": message.author.id,
             "time_stamp": str(round(dts))
         }
         snipe_data[str(message.guild.id)][str(message.channel.id)][str(message.author.id)] = {
             "content": message.content,
-            "author_name": author_name,
+            "author_id": message.author.id,
             "time_stamp": str(round(dts))
         }
         save()
@@ -161,13 +161,13 @@ async def on_message_edit(message_before, message_after):
         editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)]["latest"] = {
             "original_content": message_before.content,
             "edited_content": message_after.content,
-            "author_name": author_name,
+            "author_id": message_before.author.id,
             "time_stamp": str(round(dts))
         }
         editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)][str(message_before.author.id)] = {
             "original_content": message_before.content,
             "edited_content": message_after.content,
-            "author_name": author_name,
+            "author_id": message_before.author.id,
             "time_stamp": str(round(dts))
         }
         save()
@@ -206,14 +206,15 @@ async def snipe(ctx: ApplicationContext, user: discord.User = None):
         try:
             data = snipe_data[str(ctx.guild.id)][str(ctx.channel.id)][str(user.id)]
             localembed = discord.Embed(title=f"Last deleted message from **{user.display_name}** in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=data["content"], color=discord.Color.random())
-            localembed.set_footer(icon_url=user.avatar, text=f"This message was sent by {data['author_name']}")
+            localembed.set_footer(icon_url=user.avatar, text=f"This message was sent by {user.name}")
             await ctx.respond(embed=localembed)
         except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{ctx.channel.id}> from {user.display_name}")
     else:
         try:
             data = snipe_data[str(ctx.guild.id)][str(ctx.channel.id)]["latest"]
+            author_ctx = await client.fetch_user(data["author_id"])
             localembed = discord.Embed(title=f"Last deleted message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=data["content"], color=discord.Color.random())
-            localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was sent by {data['author_name']}")
+            localembed.set_footer(icon_url=author_ctx.avatar, text=f"This message was sent by {author_ctx.name}")
             await ctx.respond(embed=localembed)
         except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{ctx.channel.id}>")
 
@@ -228,14 +229,15 @@ async def editsnipe(ctx: ApplicationContext, user: discord.Member):
         try:
             data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)][str(user.id)]
             localembed = discord.Embed(title=f"Last edited message from **{user.display_name}** in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
-            localembed.set_footer(icon_url=user.avatar, text=f"This message was edited by {data['author_name']}")
+            localembed.set_footer(icon_url=user.avatar, text=f"This message was edited by {user.name}")
             await ctx.respond(embed=localembed)
         except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}> from {user.display_name}')
     else:
         try:
             data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)]["latest"]
+            author_ctx = await client.fetch_user(data["author_id"])
             localembed = discord.Embed(title=f"Last edited message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
-            localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was edited by {data['author_name']}")
+            localembed.set_footer(icon_url=author_ctx.avatar, text=f"This message was edited by {author_ctx.name}")
             await ctx.respond(embed=localembed)
         except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
