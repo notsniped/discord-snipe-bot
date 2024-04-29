@@ -187,6 +187,7 @@ async def on_message_edit(message_before, message_after):
     description="Need some help?"
 )
 async def help(ctx: ApplicationContext):
+    """Need some help?"""
     localembed = discord.Embed(title='Command Help', description=f'This bot uses Discord slash commands. (`/`)\n\n`/snipe`: See the most recently deleted message in this channel.\n`/editsnipe`: See the most recently edited message in this channel.\n`/set_audit_channel`: Set a channel to send all deleted and edited message audit logs to. (needs __Manage Channels__ permission)`', color=discord.Color.random())
     await ctx.send(embed=localembed)
 
