@@ -260,7 +260,7 @@ async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChanne
         else:
             localembed = discord.Embed(description=f"Deleted/Edited message audit logging for **{ctx.guild.name}** has been successfully disabled.", color=discord.Color.green())
             await ctx.respond(embed=localembed, ephemeral=True)
-    except MissingPermissions: return await ctx.respond("You can't use this command!", ephemeral=True)
+    except MissingPermissions: return await ctx.respond(":x: You can't use this command!", ephemeral=True)
 
 # User Commands
 @client.user_command(name="Snipe Latest Message")
