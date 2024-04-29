@@ -33,12 +33,15 @@ def create_files():
         open("logs/errors.log", 'x', encoding="utf-8")
     
     # Create database files
-    databases = ["snipe.json", "editsnipe.json"]
+    databases = ["snipe.json", "editsnipe.json", "database.json"]
     for db in databases:
         if not os.path.isfile(db):
             print(f"[!] \"{db}\" appears to be missing from directory. Creating file...")
             with open(db, 'x', encoding="utf-8") as f:
-                json.dump({}, f)
+                if db == "database.json":
+                    json.dump({"audit_channel": {}}, f)
+                else:
+                    json.dump({}, f)
                 f.close()
 
 create_files()
