@@ -67,10 +67,18 @@ def save():
     with open("editsnipe.json", 'w+', encoding="utf-8") as f:
         json.dump(editsnipe_data, f, indent=4)
 
-def generate_data_entries(guild_id: int) -> int:
+def generate_data_entries(guild_id: int, channel_id: int) -> int:
+    """Generates fresh guild data in the snipe and editsnipe databases, if they don't already exist."""
     if str(guild_id) not in snipe_data:
         snipe_data[str(guild_id)] = {}
+    if str(channel_id) not in snipe_data[str(guild_id)]:
+        snipe_data[str(guild_id)][str(channel_id)] = {}
+    if str(guild_id) not in editsnipe_data:
+        editsnipe_data[str(guild_id)] = {}
+    if str(channel_id) not in editsnipe_data[str(guild_id)]:
+        editsnipe_data[str(guild_id)][str(channel_id)] = {}
     save()
+    return 0
 
 # API Events
 @client.event
@@ -92,12 +100,12 @@ async def on_message(ctx):
         data["audit_channel"][str(ctx.guild.id)] = None
     with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)
 
-    generate_data_entries(ctx.guild.id)
+    generate_data_entries(ctx.guild.id, ctx.channel.id)
 
 @client.event
 async def on_message_delete(message):
     if not message.author.bot:
-        generate_data_entries(message.guild.id)
+        generate_data_entries(message.guild.id, message.channel.id)
 
         dts = time.time()
 
@@ -137,7 +145,7 @@ async def on_message_delete(message):
 @client.event
 async def on_message_edit(message_before, message_after):
     if not message_after.author.bot:
-        generate_data_entries(message_before.guild.id)
+        generate_data_entries(message_before.guild.id, message_before.channel.id)
 
         dts = time.time()
 
