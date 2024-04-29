@@ -262,6 +262,15 @@ async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChanne
             await ctx.respond(embed=localembed, ephemeral=True)
     except MissingPermissions: return await ctx.respond("You can't use this command!", ephemeral=True)
 
+# User Commands
+@client.user_command(name="Snipe Latest Message")
+async def _snipe(ctx: ApplicationContext, user: discord.User):
+    await snipe(ctx, user)
+
+@client.user_command(name="Editsnipe Latest Message")
+async def _editsnipe(ctx: ApplicationContext, user: discord.User):
+    await editsnipe(ctx, user)
+
 # Initialization
 token = auth.get_token()
 try: client.run(token)
