@@ -24,6 +24,25 @@ startTime = time.time()
 config = auth.get_raw()
 
 # Pre-Initialization Commands
+def create_files():
+    """Creates new database/log files for the client, if they are missing from the bot directory."""
+    # Create any missing log files
+    if not os.path.isdir("logs"):
+        os.mkdir("logs")
+        open("logs/snipe.log", 'x', encoding="utf-8")
+        open("logs/editsnipe.log", 'x', encoding="utf-8")
+        open("logs/errors.log", 'x', encoding="utf-8")
+    
+    # Create database files
+    databases = ["snipe.json", "editsnipe.json"]
+    for db in databases:
+        if not os.path.isfile(db):
+            print(f"[!] \"{db}\" appears to be missing from directory. Creating file...")
+            with open(db, 'x', encoding="utf-8") as f:
+                json.dump({}, f)
+                f.close()
+
+create_files()
 auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
 
 owner = auth.get_owner_name()
