@@ -111,11 +111,10 @@ async def on_message(ctx):
 async def on_message_delete(message):
     if not message.author.bot:
         generate_data_entries(message.guild.id, message.channel.id)
-
         dts = time.time()
 
         # Perform formatting for new Discord usernames.
-        author_name: str = format_username(message.author.name)
+        author_name = format_username(message.author.name)
 
         # Save the deleted message content to database
         snipe_data[str(message.guild.id)][str(message.channel.id)]["latest"] = {
@@ -148,11 +147,10 @@ async def on_message_delete(message):
 async def on_message_edit(message_before, message_after):
     if not message_after.author.bot:
         generate_data_entries(message_before.guild.id, message_before.channel.id)
-
         dts = time.time()
 
         # Perform formatting for new Discord usernames.
-        author_name: str = format_username(message_before.author.name)
+        author_name = format_username(message_before.author.name)
 
         # Save the edited message content to database
         editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)]["latest"] = {
