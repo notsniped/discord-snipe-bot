@@ -106,16 +106,26 @@ async def on_message_delete(message):
         author_name_split = author_name.split("#")
         if author_name_split[-1] == 0:
             author_name = author_name_split[0]
-        snipe_data[str(message.channel.id)] = {
+
+        # Save the deleted message content to database
+        snipe_data[str(message.guild.id)][str(message.channel.id)]["latest"] = {
             "content": message.content,
             "author_name": author_name,
             "time_stamp": str(round(dts))
         }
+        snipe_data[str(message.guild.id)][str(message.channel.id)][str(message.author.id)] = {
+            "content": message.content,
+            "author_name": author_name,
+            "time_stamp": str(round(dts))
+        }
+
+        # Log the edited message content to the client deleted message log.
         if bool(snipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
             print(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}):\n   Message content: {message.content}")
             logger.snipe(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}): {message.content}")
-        else: pass
+
+        # Send the deleted message content to audit logging channel
         with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)
         if data["audit_channel"][str(message.guild.id)] is not None:
             localembed = discord.Embed(title=f"Message deleted in #{message.channel.name} <t:{round(dts)}:R>", description=message.content, color=discord.Color.red())
