@@ -23,25 +23,62 @@ global startTime
 startTime = time.time()
 config = auth.get_raw()
 
-# Initialize dicts for snipe and editsnipe data
-snipe_data = {}
-editsnipe_data = {}
-
 # Pre-Initialization Commands
+def create_files():
+    """Creates new database/log files for the client, if they are missing from the bot directory."""
+    # Create any missing log files
+    if not os.path.isdir("logs"):
+        os.mkdir("logs")
+        open("logs/snipe.log", 'x', encoding="utf-8")
+        open("logs/editsnipe.log", 'x', encoding="utf-8")
+        open("logs/errors.log", 'x', encoding="utf-8")
+    
+    # Create database files
+    databases = ["snipe.json", "editsnipe.json"]
+    for db in databases:
+        if not os.path.isfile(db):
+            print(f"[!] \"{db}\" appears to be missing from directory. Creating file...")
+            with open(db, 'x', encoding="utf-8") as f:
+                json.dump({}, f)
+                f.close()
+
+create_files()
 auth.initial_setup()  # Check if bot token and owner username are missing and ask user if they want to add it
 
 owner = auth.get_owner_name()
 
-snipe_log:bool = config[str("config")][str("logs")]["snipe"]
-editsnipe_log:bool = config[str("config")][str("logs")]["editsnipe"]
-
-if not os.path.isdir("logs"):  # Create logs dir and all log files if they are missing from current working directory
-    os.mkdir("logs")
-    open("logs/snipe.log", 'x', encoding="utf-8")
-    open("logs/editsnipe.log", 'x', encoding="utf-8")
-    open("logs/errors.log", 'x', encoding="utf-8")
+snipe_log: bool = config[str("config")][str("logs")]["snipe"]
+editsnipe_log: bool = config[str("config")][str("logs")]["editsnipe"]
 
 logger = framework.logger.Logger()
+
+# Initialize dicts for snipe and editsnipe data
+with open("snipe.json", 'r', encoding="utf-8") as f:
+    snipe_data: dict = json.load(f)
+
+with open("editsnipe.json", 'r', encoding="utf-8") as f:
+    editsnipe_data: dict = json.load(f)
+
+def save():
+    """Dumps the latest cached data of the databases to local storage."""
+    with open("snipe.json", 'w+', encoding="utf-8") as f:
+        json.dump(snipe_data, f, indent=4)
+
+    with open("editsnipe.json", 'w+', encoding="utf-8") as f:
+        json.dump(editsnipe_data, f, indent=4)
+
+def generate_data_entries(guild_id: int, channel_id: int) -> int:
+    """Generates fresh guild data in the snipe and editsnipe databases, if they don't already exist."""
+    if str(guild_id) not in snipe_data:
+        snipe_data[str(guild_id)] = {}
+    if str(channel_id) not in snipe_data[str(guild_id)]:
+        snipe_data[str(guild_id)][str(channel_id)] = {}
+    if str(guild_id) not in editsnipe_data:
+        editsnipe_data[str(guild_id)] = {}
+    if str(channel_id) not in editsnipe_data[str(guild_id)]:
+        editsnipe_data[str(guild_id)][str(channel_id)] = {}
+    save()
+    return 0
 
 # API Events
 @client.event
@@ -63,24 +100,41 @@ async def on_message(ctx):
         data["audit_channel"][str(ctx.guild.id)] = None
     with open("database.json", 'w+', encoding="utf-8") as f: json.dump(data, f, indent=4)
 
+    generate_data_entries(ctx.guild.id, ctx.channel.id)
+
 @client.event
 async def on_message_delete(message):
     if not message.author.bot:
+        generate_data_entries(message.guild.id, message.channel.id)
+
         dts = time.time()
+
+        # Perform formatting for new Discord usernames.
         author_name: str = message.author.name
         author_name_split = author_name.split("#")
         if author_name_split[-1] == 0:
             author_name = author_name_split[0]
-        snipe_data[str(message.channel.id)] = {
+
+        # Save the deleted message content to database
+        snipe_data[str(message.guild.id)][str(message.channel.id)]["latest"] = {
             "content": message.content,
             "author_name": author_name,
             "time_stamp": str(round(dts))
         }
+        snipe_data[str(message.guild.id)][str(message.channel.id)][str(message.author.id)] = {
+            "content": message.content,
+            "author_name": author_name,
+            "time_stamp": str(round(dts))
+        }
+        save()
+
+        # Log the edited message content to the client deleted message log.
         if bool(snipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
             print(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}):\n   Message content: {message.content}")
             logger.snipe(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}): {message.content}")
-        else: pass
+
+        # Send the deleted message content to audit logging channel
         with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)
         if data["audit_channel"][str(message.guild.id)] is not None:
             localembed = discord.Embed(title=f"Message deleted in #{message.channel.name} <t:{round(dts)}:R>", description=message.content, color=discord.Color.red())
@@ -91,22 +145,38 @@ async def on_message_delete(message):
 @client.event
 async def on_message_edit(message_before, message_after):
     if not message_after.author.bot:
+        generate_data_entries(message_before.guild.id, message_before.channel.id)
+
         dts = time.time()
+
+        # Perform formatting for new Discord usernames.
         author_name: str = message_before.author.name
         author_name_split = author_name.split("#")
         if author_name_split[-1] == 0:
             author_name = author_name_split[0]
-        editsnipe_data[str(message_before.channel.id)] = {
+
+        # Save the edited message content to database
+        editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)]["latest"] = {
             "original_content": message_before.content,
             "edited_content": message_after.content,
             "author_name": author_name,
             "time_stamp": str(round(dts))
         }
+        editsnipe_data[str(message_before.guild.id)][str(message_before.channel.id)][str(message_before.author.id)] = {
+            "original_content": message_before.content,
+            "edited_content": message_after.content,
+            "author_name": author_name,
+            "time_stamp": str(round(dts))
+        }
+        save()
+
+        # Log the edited message content to the client deleted message log.
         if bool(editsnipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
             print(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
             logger.editsnipe(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
-        else: pass
+
+        # Send the edited message content to audit logging channel
         with open("database.json", 'r', encoding="utf-8") as f: data = json.load(f)
         if data["audit_channel"][str(message_before.guild.id)] is not None:
             localembed = discord.Embed(title=f"Message edited in #{message_before.channel.name} <t:{round(dts)}:R>", description=f'**Message before**:```{message_before.content}```\n**Message after**:```{message_after.content}```', color=discord.Color.orange())
@@ -127,25 +197,45 @@ async def help(ctx: ApplicationContext):
     name="snipe",
     description="Fetch the latest deleted message in this channel."
 )
-async def snipe(ctx: ApplicationContext):
-    try:
-        data = snipe_data[str(ctx.channel.id)]
-        localembed = discord.Embed(title=f"Last deleted message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=data["content"], color=discord.Color.random())
-        localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was sent by {data['author_name']}")
-        await ctx.respond(embed=localembed)
-    except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{ctx.channel.id}>")
+@option(name="user", description="Snipe message content in the channel from a specific user.", type=discord.User, default=None)
+async def snipe(ctx: ApplicationContext, user: discord.User = None):
+    """Fetch the latest deleted message in this channel."""
+    if user is not None:
+        try:
+            data = snipe_data[str(ctx.guild.id)][str(ctx.channel.id)][str(user.id)]
+            localembed = discord.Embed(title=f"Last deleted message from **{user.display_name}** in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=data["content"], color=discord.Color.random())
+            localembed.set_footer(icon_url=user.avatar, text=f"This message was sent by {data['author_name']}")
+            await ctx.respond(embed=localembed)
+        except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{ctx.channel.id}> from {user.display_name}")
+    else:
+        try:
+            data = snipe_data[str(ctx.guild.id)][str(ctx.channel.id)]["latest"]
+            localembed = discord.Embed(title=f"Last deleted message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=data["content"], color=discord.Color.random())
+            localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was sent by {data['author_name']}")
+            await ctx.respond(embed=localembed)
+        except KeyError: await ctx.respond(f"There are no recently deleted messages in <#{ctx.channel.id}>")
 
 @client.slash_command(
     name="editsnipe",
     description="Fetch the latest edited message in this channel."
 )
-async def editsnipe(ctx: ApplicationContext):
-    try:
-        data = editsnipe_data[str(ctx.channel.id)]
-        localembed = discord.Embed(title=f"Last edited message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
-        localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was edited by {data['author_name']}")
-        await ctx.respond(embed=localembed)
-    except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
+@option(name="user", description="Editsnipe message content in the channel from a specific user.", type=discord.User, default=None)
+async def editsnipe(ctx: ApplicationContext, user: discord.Member):
+    """Fetch the latest edited message in this channel."""
+    if user is not None:
+        try:
+            data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)][str(user.id)]
+            localembed = discord.Embed(title=f"Last edited message from **{user.display_name}** in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
+            localembed.set_footer(icon_url=user.avatar, text=f"This message was edited by {data['author_name']}")
+            await ctx.respond(embed=localembed)
+        except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}> from {user.display_name}')
+    else:
+        try:
+            data = editsnipe_data[str(ctx.guild.id)][str(ctx.channel.id)]["latest"]
+            localembed = discord.Embed(title=f"Last edited message in #{ctx.channel.name} <t:{data['time_stamp']}:R>", description=f'**Message before**:```{data["original_content"]}```\n**Message after**:```{data["edited_content"]}```', color=discord.Color.random())
+            localembed.set_footer(icon_url=ctx.author.avatar, text=f"This message was edited by {data['author_name']}")
+            await ctx.respond(embed=localembed)
+        except KeyError: await ctx.respond(f'There are no recently edited messages in <#{ctx.channel.id}>')
 
 @client.slash_command(
     name="set_audit_channel",
