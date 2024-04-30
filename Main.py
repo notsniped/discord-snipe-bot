@@ -89,6 +89,18 @@ def format_username(username: str) -> str:
         author_name = author_name_split[0]
     return author_name
 
+# Error handler
+@client.event
+async def on_application_command_error(ctx: ApplicationContext, error: discord.DiscordException):
+    """An event handler to handle command exceptions when things go wrong.\n\nSome exceptions may be pre-handled, but any unhandable exceptions will be logged as an error."""
+    if isinstance(error, commands.MissingPermissions): await ctx.respond(":warning: You don't have the required server permissions to run this command!", ephemeral=True)
+    elif isinstance(error, commands.BotMissingPermissions): await ctx.respond(":x: I don\'t have the required permissions to use this.\nIf you think this is a mistake, please go to server settings and fix the bot's role permissions.")
+    elif isinstance(error, commands.NoPrivateMessage): await ctx.respond(":x: You can only use this command in a server!", ephemeral=True)
+    else:  # If the exception isnt pre-handled, land at this logic-gate and return the raw error from the command.
+        print(f"[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}")
+        logger.error(f"[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}")
+        await ctx.respond(f"An uncaught error occured while running the command.\n```\n{error}\n```")
+
 # API Events
 @client.event
 async def on_ready():
@@ -199,6 +211,7 @@ async def help(ctx: ApplicationContext):
     name="snipe",
     description="Fetch the latest deleted message in this channel."
 )
+@commands.guild_only()
 @option(name="user", description="Snipe message content in the channel from a specific user.", type=discord.User, default=None)
 async def snipe(ctx: ApplicationContext, user: discord.User = None):
     """Fetch the latest deleted message in this channel."""
@@ -222,6 +235,7 @@ async def snipe(ctx: ApplicationContext, user: discord.User = None):
     name="editsnipe",
     description="Fetch the latest edited message in this channel."
 )
+@commands.guild_only()
 @option(name="user", description="Editsnipe message content in the channel from a specific user.", type=discord.User, default=None)
 async def editsnipe(ctx: ApplicationContext, user: discord.Member):
     """Fetch the latest edited message in this channel."""
@@ -245,6 +259,7 @@ async def editsnipe(ctx: ApplicationContext, user: discord.Member):
     name="set_audit_channel",
     description="Set a channel to send all deleted and edited messages to."
 )
+@commands.guild_only()
 @commands.has_permissions(manage_channels=True)
 @option(name="channel", description="The channel that you want to set for audit logs. (leave blank to disable audit logging)", type=discord.TextChannel, default=None)
 async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChannel = None):
