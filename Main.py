@@ -96,6 +96,7 @@ async def on_application_command_error(ctx: ApplicationContext, error: discord.D
     elif isinstance(error, commands.BotMissingPermissions): await ctx.respond(":x: I don\'t have the required permissions to use this.\nIf you think this is a mistake, please go to server settings and fix the bot's role permissions.")
     elif isinstance(error, commands.NoPrivateMessage): await ctx.respond(":x: You can only use this command in a server!", ephemeral=True)
     else:  # If the exception isnt pre-handled, land at this logic-gate and return the raw error from the command.
+        print(f"[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}")
         logger.error(f"[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}")
         await ctx.respond(f"An uncaught error occured while running the command.\n```\n{error}\n```")
 
