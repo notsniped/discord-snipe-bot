@@ -6,6 +6,7 @@ import discord
 import json
 import framework.auth
 import framework.logger
+from framework.colors import Colors as colors
 from datetime import datetime
 from discord import ApplicationContext, option
 from discord.ext import commands
@@ -30,6 +31,7 @@ def create_files():
     logs = ["snipe.log", "editsnipe.log", "errors.log"]
     for log_file in logs:
         if not os.path.isfile(f"logs/{log_file}"):
+            print(f"[!] {colors.yellow}\"{log_file}\" appears to be missing from logs directory.{colors.end} Creating file...")
             with open(f"logs/{log_file}", 'x', encoding="utf-8") as f:
                 f.close()
     
@@ -37,7 +39,7 @@ def create_files():
     databases = ["snipe.json", "editsnipe.json", "database.json"]
     for db in databases:
         if not os.path.isfile(db):
-            print(f"[!] \"{db}\" appears to be missing from directory. Creating file...")
+            print(f"[!] {colors.yellow}\"{db}\" appears to be missing from directory.{colors.end} Creating file...")
             with open(db, 'x', encoding="utf-8") as f:
                 if db == "database.json":
                     json.dump({"audit_channel": {}}, f)
@@ -97,19 +99,19 @@ async def on_application_command_error(ctx: ApplicationContext, error: discord.D
     elif isinstance(error, commands.BotMissingPermissions): await ctx.respond(":x: I don\'t have the required permissions to use this.\nIf you think this is a mistake, please go to server settings and fix the bot's role permissions.")
     elif isinstance(error, commands.NoPrivateMessage): await ctx.respond(":x: You can only use this command in a server!", ephemeral=True)
     else:  # If the exception isnt pre-handled, land at this logic-gate and return the raw error from the command.
-        print(f"[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}")
+        print(f"{colors.red}[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}{colors.end}")
         logger.error(f"[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}")
         await ctx.respond(f"An uncaught error occured while running the command.\n```\n{error}\n```")
 
 # API Events
 @client.event
 async def on_ready():
-    print(f'Logged on to Discord as {client.user.name}')
+    print(f'[main/Client] {colors.green}Logged on to Discord as {client.user.name}{colors.end}')
     print('====================')
     print('Some client info:')
     print('------------------')
     print(f'  Latency: {round(client.latency * 1000)}ms')
-    print(f'  Startup time: {round(startTime)}')
+    print(f'  Startup timestamp: {round(startTime)}')
     print(f'  Owner: {str(owner)}')
     print('------------------')
     print('====================')
@@ -148,7 +150,7 @@ async def on_message_delete(message):
         # Log the edited message content to the client deleted message log.
         if bool(snipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
-            print(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}):\n   Message content: {message.content}")
+            print(f"[{timestamp}] {colors.cyan}Message deleted in #{message.channel}{colors.end} ({message.guild}):\n   Message content: {message.content}")
             logger.snipe(f"[{timestamp}] Message deleted in #{message.channel} ({message.guild}): {message.content}")
 
         # Send the deleted message content to audit logging channel
@@ -186,7 +188,7 @@ async def on_message_edit(message_before, message_after):
         # Log the edited message content to the client deleted message log.
         if bool(editsnipe_log):
             timestamp = datetime.now().strftime('%H:%M:%S')
-            print(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
+            print(f"[{timestamp}] {colors.cyan}Message edited in #{message_before.channel}{colors.end} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
             logger.editsnipe(f"[{timestamp}] Message edited in #{message_before.channel} ({message_before.guild}):\n   Old message: {message_before.content}\n   New message: {message_after.content}")
 
         # Send the edited message content to audit logging channel
@@ -294,5 +296,5 @@ async def _editsnipe(ctx: ApplicationContext, user: discord.User):
 token = auth.get_token()
 try: client.run(token)
 except Exception as exc:
-    print(f"[main/CLIENT] Error: Unable to start client: {type(exc).__name__}: {exc}")
+    print(f"[main/Client] {colors.red}Error: Unable to start client: {type(exc).__name__}: {exc}{colors.end}")
     raise SystemExit
