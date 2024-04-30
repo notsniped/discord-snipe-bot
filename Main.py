@@ -209,6 +209,7 @@ async def help(ctx: ApplicationContext):
     name="snipe",
     description="Fetch the latest deleted message in this channel."
 )
+@commands.guild_only()
 @option(name="user", description="Snipe message content in the channel from a specific user.", type=discord.User, default=None)
 async def snipe(ctx: ApplicationContext, user: discord.User = None):
     """Fetch the latest deleted message in this channel."""
@@ -232,6 +233,7 @@ async def snipe(ctx: ApplicationContext, user: discord.User = None):
     name="editsnipe",
     description="Fetch the latest edited message in this channel."
 )
+@commands.guild_only()
 @option(name="user", description="Editsnipe message content in the channel from a specific user.", type=discord.User, default=None)
 async def editsnipe(ctx: ApplicationContext, user: discord.Member):
     """Fetch the latest edited message in this channel."""
@@ -255,6 +257,7 @@ async def editsnipe(ctx: ApplicationContext, user: discord.Member):
     name="set_audit_channel",
     description="Set a channel to send all deleted and edited messages to."
 )
+@commands.guild_only()
 @commands.has_permissions(manage_channels=True)
 @option(name="channel", description="The channel that you want to set for audit logs. (leave blank to disable audit logging)", type=discord.TextChannel, default=None)
 async def set_audit_channel(ctx: ApplicationContext, channel: discord.TextChannel = None):
