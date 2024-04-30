@@ -88,6 +88,17 @@ def format_username(username: str) -> str:
         author_name = author_name_split[0]
     return author_name
 
+# Error handler
+@client.event
+async def on_application_command_error(ctx: ApplicationContext, error: discord.DiscordException):
+    """An event handler to handle command exceptions when things go wrong.\n\nSome exceptions may be pre-handled, but any unhandable exceptions will be logged as an error."""
+    if isinstance(error, commands.MissingPermissions): await ctx.respond(":warning: You don't have the required server permissions to run this command!", ephemeral=True)
+    elif isinstance(error, commands.BotMissingPermissions): await ctx.respond(":x: I don\'t have the required permissions to use this.\nIf you think this is a mistake, please go to server settings and fix the bot's role permissions.")
+    elif isinstance(error, commands.NoPrivateMessage): await ctx.respond(":x: You can only use this command in a server!", ephemeral=True)
+    else:  # If the exception isnt pre-handled, land at this logic-gate and return the raw error from the command.
+        logger.error(f"[main/Client] Command failure: An uncaught error occured while running the command.\n   >>> {error}")
+        await ctx.respond(f"An uncaught error occured while running the command.\n```\n{error}\n```")
+
 # API Events
 @client.event
 async def on_ready():
