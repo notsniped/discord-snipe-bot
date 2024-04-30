@@ -28,9 +28,11 @@ def create_files():
     # Create any missing log files
     if not os.path.isdir("logs"):
         os.mkdir("logs")
-        open("logs/snipe.log", 'x', encoding="utf-8")
-        open("logs/editsnipe.log", 'x', encoding="utf-8")
-        open("logs/errors.log", 'x', encoding="utf-8")
+    logs = ["snipe.log", "editsnipe.log", "errors.log"]
+    for log_file in logs:
+        if not os.path.isfile(f"logs/{log_file}"):
+            with open(f"logs/{log_file}", 'x', encoding="utf-8") as f:
+                f.close()
     
     # Create database files
     databases = ["snipe.json", "editsnipe.json", "database.json"]
