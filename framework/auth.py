@@ -7,6 +7,13 @@ import os.path
 class Auth:
     def load(self):
         """Loads the latest content from the database from machine local storage."""
+        # Generate config.json file if its missing.
+        if not os.path.isfile("config.json"):
+            with open("config.json", 'x', encoding="utf-8") as f:
+                json.dump({"auth": {"token": ""}, "config": {"owner_name": "", "logs": {"snipe": True, "editsnipe": True}}}, f)
+                f.close()
+        
+        # Load config.json database
         with open("config.json", 'r', encoding="utf-8") as f: config = json.load(f)
         return config
 
@@ -16,13 +23,6 @@ class Auth:
 
     def initial_setup(self):
         """Runs the bot's initial setup by generating a `config.json` file if missing, and asking for bot token/owner username if not provided."""
-        # Generate config.json file if its missing.
-        if not os.path.isfile("config.json"):
-            with open("config.json", 'x', encoding="utf-8") as f:
-                json.dump({"auth": {"token": ""}, "config": {"owner_name": "", "logs": {"snipe": True, "editsnipe": True}}}, f)
-                f.close()
-
-        # Ask for bot token and owner name, if missing from config.json file.
         config = self.load()
         if config["auth"]["token"] == "":
             confirmation = input("[!] No bot token was detected in config.json. Would you like to input a token? (Y/n): ")
