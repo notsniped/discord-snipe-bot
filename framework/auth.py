@@ -1,11 +1,19 @@
 """The authorization library for Discord Snipe Bot."""
 # Imports
 import json
+import os.path
 
 # Classes
 class Auth:
     def load(self):
         """Loads the latest content from the database from machine local storage."""
+        # Generate config.json file if its missing.
+        if not os.path.isfile("config.json"):
+            with open("config.json", 'x', encoding="utf-8") as f:
+                json.dump({"auth": {"token": ""}, "config": {"owner_name": "", "logs": {"snipe": True, "editsnipe": True}}}, f)
+                f.close()
+        
+        # Load config.json database
         with open("config.json", 'r', encoding="utf-8") as f: config = json.load(f)
         return config
 
