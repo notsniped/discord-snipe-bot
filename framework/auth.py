@@ -1,6 +1,7 @@
 """The authorization library for Discord Snipe Bot."""
 # Imports
 import json
+import os.path
 
 # Classes
 class Auth:
@@ -15,6 +16,13 @@ class Auth:
 
     def initial_setup(self):
         """Runs the bot's initial setup by generating a `config.json` file if missing, and asking for bot token/owner username if not provided."""
+        # Generate config.json file if its missing.
+        if not os.path.isfile("config.json"):
+            with open("config.json", 'x', encoding="utf-8") as f:
+                json.dump({"auth": {"token": ""}, "config": {"owner_name": "", "logs": {"snipe": True, "editsnipe": True}}}, f)
+                f.close()
+
+        # Ask for bot token and owner name, if missing from config.json file.
         config = self.load()
         if config["auth"]["token"] == "":
             confirmation = input("[!] No bot token was detected in config.json. Would you like to input a token? (Y/n): ")
