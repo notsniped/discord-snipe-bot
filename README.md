@@ -28,6 +28,8 @@ When you run this, the client will ask you to input a **Discord bot token** and 
 
 (you can get a bot token from making a new application at https://discord.com/developers)
 
+***WARNING!!* DO NOT PASTE YOUR DISCORD BOT TOKEN IN `Main.py`!** Please put it either in `config.json` or paste it in the bot setup process during startup. __This is to prevent your Discord bot token from being accidentally leaked.__
+
 **NOTE:** Before running the program, remember to enable the `Message Content Intent` in your Application's Bot Settings. Otherwise the bot won't be able to read any messages and it will not work.
 
 ![image](https://github.com/notsniped/discord-snipe-bot/assets/72265661/0b614f53-7626-459b-a727-d192a000565b)
